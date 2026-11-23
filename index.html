@@ -1,0 +1,1571 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ECEFF3" id="themeColor">
+<script>(function(){var p="auto";try{p=localStorage.getItem("vowkeep.theme")||"auto";}catch(e){}var d=p==="dark"||(p!=="light"&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.dataset.themePref=p;var m=document.getElementById("themeColor");if(m)m.content=d?"#0C0F14":"#ECEFF3";})();</script>
+<meta name="description" content="VowKeep: stake GEN on a public goal and get it back only if public evidence proves you did it. Checked by GenLayer validators.">
+<title>VowKeep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ground:#ECEFF3; --surface:#FFFFFF; --surface-2:#F5F7F9; --ink:#131B24; --ink-2:#435060; --ink-3:#5B6775;
+  --line:#D5DBE2; --line-strong:#BCC5CF;
+  --sig:#A55400; --sig-hover:#8C4700; --on-sig:#FFFFFF; --sig-soft:#FBEFDF; --sig-line:#E9C493;
+  --info:#2C5AA8; --info-soft:#E4ECF8; --due:#6A47B3; --due-soft:#ECE6F8; --appeal:#A0335B; --appeal-soft:#F7E3EA;
+  --ok:#1E7346; --ok-soft:#E1F1E7; --part:#0D7068; --part-soft:#DDF0EE; --bad:#B0281E; --bad-soft:#F8E2DF; --idle-soft:#E9EDF1;
+  --focus:#A55400;
+  --shadow:0 1px 2px rgba(19,27,36,.06),0 1px 1px rgba(19,27,36,.04);
+  --shadow-raise:0 6px 18px rgba(19,27,36,.08),0 1px 2px rgba(19,27,36,.06);
+  --shadow-pop:0 18px 48px rgba(19,27,36,.18);
+  --font:"Public Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --t-xs:12.5px; --t-sm:14px; --t-md:16px; --t-lg:18px; --t-xl:22px; --t-head:clamp(26px,5.4vw,36px);
+  --r-sm:6px; --r-md:10px; --r-lg:14px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --nav-h:64px; --side-w:232px;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --ground:#0C0F14; --surface:#151A21; --surface-2:#1A2029; --ink:#E8ECF2; --ink-2:#B3BCC8; --ink-3:#8F9AA8;
+  --line:#262E39; --line-strong:#364150;
+  --sig:#F2A93B; --sig-hover:#F7BC62; --on-sig:#1C1205; --sig-soft:#2B2213; --sig-line:#5A4321;
+  --info:#86AEF2; --info-soft:#18233A; --due:#B9A1F4; --due-soft:#231C38; --appeal:#F193B4; --appeal-soft:#36192A;
+  --ok:#62CD93; --ok-soft:#13291E; --part:#5FCDC2; --part-soft:#112926; --bad:#F28A80; --bad-soft:#371917; --idle-soft:#1D232C;
+  --focus:#F2A93B;
+  --shadow:0 1px 2px rgba(0,0,0,.4); --shadow-raise:0 8px 22px rgba(0,0,0,.45); --shadow-pop:0 18px 48px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font);font-size:var(--t-md);line-height:1.5;
+  -webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom))}
+h1,h2,h3{margin:0;line-height:1.22;letter-spacing:-.018em}
+h1{font-size:var(--t-head);font-weight:700}
+h2{font-size:var(--t-lg);font-weight:700}
+h3{font-size:var(--t-md);font-weight:650}
+p{margin:0}
+a{color:var(--ink);text-underline-offset:3px;text-decoration-color:var(--line-strong)}
+a:hover{text-decoration-color:var(--sig)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:4px}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:8px;top:-60px;z-index:100;background:var(--ink);color:var(--ground);padding:10px 14px;border-radius:var(--r-sm)}
+.skip:focus{top:8px}
+svg.ic{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;height:58px;padding:0 16px;
+  background:color-mix(in srgb,var(--ground) 92%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font-weight:700;font-size:18px;letter-spacing:-.02em;min-height:44px;flex:none}
+.mark{width:28px;height:28px;flex:none;display:block}
+.env{font-size:var(--t-xs);font-weight:600;padding:2px 8px;border-radius:999px;border:1px solid var(--line-strong);color:var(--ink-2);white-space:nowrap}
+.grow{flex:1}
+@media (max-width:479px){.topbar .env{display:none}}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:var(--r-sm);border:1px solid var(--line);
+  background:var(--surface);color:var(--ink-2);cursor:pointer;flex:none}
+.iconbtn:hover{color:var(--ink);border-color:var(--line-strong)}
+.walletbtn{display:inline-flex;align-items:center;gap:8px;min-height:40px;min-width:0;flex:0 1 auto;max-width:52vw;padding:0 12px;border:1px solid var(--line-strong);
+  background:var(--surface);color:var(--ink);border-radius:var(--r-sm);font:inherit;font-size:var(--t-sm);font-weight:600;cursor:pointer;box-shadow:var(--shadow)}
+.walletbtn .lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.walletbtn .dot{width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex:none}
+.walletbtn.on .dot{background:var(--ok)}
+.walletbtn.warn .dot{background:var(--bad)}
+.netbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 16px;background:var(--bad-soft);color:var(--ink);border-bottom:1px solid var(--line);font-size:var(--t-sm)}
+
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs ul{list-style:none;margin:0;padding:4px 6px;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;height:var(--nav-h)}
+nav.tabs a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:100%;border-radius:var(--r-md);border:1px solid transparent;
+  color:var(--ink-3);text-decoration:none;font-size:11.5px;font-weight:600}
+nav.tabs a:hover{color:var(--ink)}
+nav.tabs a[aria-current="page"]{color:var(--ink)}
+nav.tabs a[aria-current="page"] svg{color:var(--sig)}
+nav.tabs .side-brand,nav.tabs .side-foot{display:none}
+main{padding:24px 16px 48px;max-width:1120px;margin:0 auto;min-height:70vh}
+main:focus{outline:none}
+footer.foot{max-width:1120px;margin:0 auto;padding:0 16px 32px;font-size:var(--t-xs);color:var(--ink-3)}
+footer.foot p+p{margin-top:4px}
+footer.foot .addr{color:var(--ink-2)}
+@media (min-width:1024px){
+  body{padding-bottom:0;padding-left:var(--side-w)}
+  .topbar{padding:0 32px}
+  .topbar .brand{display:none}
+  .walletbtn{max-width:320px}
+  nav.tabs{top:0;right:auto;width:var(--side-w);bottom:0;border-top:0;border-right:1px solid var(--line);background:var(--surface);padding:14px 12px;display:flex;flex-direction:column}
+  nav.tabs .side-brand{display:flex;padding:0 8px}
+  nav.tabs ul{display:flex;flex-direction:column;height:auto;padding:18px 0;gap:4px}
+  nav.tabs a{flex-direction:row;justify-content:flex-start;gap:12px;height:44px;padding:0 12px;font-size:var(--t-sm);color:var(--ink-2)}
+  nav.tabs a[aria-current="page"]{border-color:var(--line-strong);background:var(--surface-2)}
+  nav.tabs .side-foot{display:block;margin-top:auto;padding:0 8px}
+  main{padding:32px 32px 56px}
+  footer.foot{padding:0 32px 32px}
+}
+.seg{display:flex;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+.seg button{flex:1;min-height:36px;border:0;background:transparent;color:var(--ink-2);font:inherit;font-size:var(--t-xs);font-weight:600;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface-2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-strong)}
+
+.stack>*+*{margin-top:16px}
+.row{display:flex;align-items:center;gap:12px}
+.between{justify-content:space-between}
+.wrap{flex-wrap:wrap}
+.muted{color:var(--ink-2)}
+.small{font-size:var(--t-sm)}
+.xs{font-size:var(--t-xs);color:var(--ink-3)}
+.addr{word-break:break-all;letter-spacing:.01em}
+.measure{max-width:62ch}
+.pagehead{margin-bottom:24px}
+.pagehead h1{font-size:clamp(24px,4.6vw,30px)}
+.pagehead p{margin-top:6px;color:var(--ink-2);max-width:62ch}
+.section{margin-top:40px}
+.sechead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.sechead .btn{flex:none}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;box-shadow:var(--shadow);min-width:0}
+@media (min-width:600px){.panel{padding:24px}}
+.inset{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px}
+.callout{border:1px solid var(--line);border-left:3px solid var(--info);background:var(--info-soft);padding:12px 14px;border-radius:var(--r-md);font-size:var(--t-sm)}
+.callout.warn{border-left-color:var(--sig);background:var(--sig-soft)}
+.callout.bad{border-left-color:var(--bad);background:var(--bad-soft)}
+.callout.ok{border-left-color:var(--ok);background:var(--ok-soft)}
+.cols{display:grid;gap:20px;grid-template-columns:minmax(0,1fr)}
+@media (max-width:899px){.cols.act-first>.side{order:-1}}
+@media (min-width:900px){.cols{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:start;gap:24px}.cols .side{position:sticky;top:78px}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:var(--r-sm);
+  font:inherit;font-weight:650;font-size:var(--t-md);border:1px solid transparent;cursor:pointer;text-decoration:none;text-align:center;line-height:1.25;
+  transition:background-color .15s var(--ease),border-color .15s var(--ease),box-shadow .15s var(--ease)}
+.btn-primary{background:var(--sig);color:var(--on-sig)}
+.btn-primary:hover{background:var(--sig-hover)}
+.btn-secondary{background:var(--surface);color:var(--ink);border-color:var(--line-strong);box-shadow:var(--shadow)}
+.btn-secondary:hover{box-shadow:var(--shadow-raise)}
+.btn-quiet{background:transparent;color:var(--ink-2);border-color:transparent}
+.btn-quiet:hover{color:var(--ink);background:var(--surface-2)}
+.btn-danger{background:var(--surface);color:var(--bad);border-color:var(--line-strong)}
+.btn.sm{min-height:38px;padding:0 12px;font-size:var(--t-sm)}
+.btn.block{width:100%}
+.btn[disabled],.btn[aria-disabled="true"]{opacity:.55;cursor:not-allowed}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.actions>.btn{flex:1 1 auto}
+@media (min-width:600px){.actions>.btn{flex:0 0 auto}}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field+.field{margin-top:16px}
+.field label,.lbl-s{font-size:var(--t-sm);font-weight:650}
+.help{font-size:var(--t-xs);color:var(--ink-3);overflow-wrap:anywhere}
+.err{color:var(--bad);font-size:var(--t-sm);min-height:0}
+.err:empty{display:none}
+.input,textarea.input{width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--line-strong);border-radius:var(--r-sm);background:var(--surface);color:var(--ink);font:inherit;font-size:16px}
+textarea.input{min-height:88px;resize:vertical}
+.input[aria-invalid="true"]{border-color:var(--bad)}
+.req{color:var(--sig);margin-left:2px}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface);
+  color:var(--ink);font:inherit;font-size:var(--t-sm);font-weight:600;cursor:pointer;text-decoration:none;position:relative;white-space:nowrap}
+.chip:hover{border-color:var(--ink-3)}
+.chip[aria-pressed="true"]{border-color:var(--sig);background:var(--sig-soft);color:var(--ink);box-shadow:inset 0 0 0 1px var(--sig)}
+.chip .dateinp{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;border:0;padding:0;font-size:16px}
+.chip .dateinp::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;cursor:pointer;opacity:0}
+
+.status{display:inline-flex;align-items:center;gap:6px;font-size:var(--t-xs);font-weight:650;padding:3px 10px 3px 8px;border-radius:999px;background:var(--idle-soft);color:var(--ink-2);white-space:nowrap}
+.status::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.t-info{background:var(--info-soft);color:var(--info)} .t-due{background:var(--due-soft);color:var(--due)} .t-appeal{background:var(--appeal-soft);color:var(--appeal)}
+.t-ok{background:var(--ok-soft);color:var(--ok)} .t-part{background:var(--part-soft);color:var(--part)} .t-bad{background:var(--bad-soft);color:var(--bad)} .t-wait{background:var(--idle-soft);color:var(--ink-2)}
+
+.hero{display:grid;gap:24px;grid-template-columns:minmax(0,1fr);align-items:center}
+@media (min-width:860px){.hero{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}}
+.livepill{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:var(--t-sm);color:var(--ink-2);box-shadow:var(--shadow)}
+.livepill i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
+.livepill b{color:var(--ink)}
+.hero h1{margin-top:16px;max-width:18ch}
+.lede{margin-top:12px;color:var(--ink-2);font-size:var(--t-lg);max-width:46ch;line-height:1.5}
+.hero .actions{margin-top:22px}
+.hero-art{max-width:420px;width:100%;justify-self:center}
+.hero-art svg{width:100%;height:auto;display:block}
+.stamp{transform-box:fill-box;transform-origin:center;animation:stamp .7s var(--ease) .35s both}
+@keyframes stamp{from{opacity:0;transform:scale(1.35) rotate(-14deg)}to{opacity:1;transform:scale(1) rotate(-8deg)}}
+@media (prefers-reduced-motion:reduce){.stamp{animation:none;transform:rotate(-8deg)}}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin:28px 0 0;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow)}
+@media (min-width:760px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stats>div{background:var(--surface);padding:14px 16px;min-width:0}
+.stats dt{font-size:var(--t-xs);color:var(--ink-3);font-weight:600}
+.stats dd{margin:4px 0 0;font-size:clamp(20px,4.6vw,26px);font-weight:700;letter-spacing:-.02em;line-height:1.15;overflow-wrap:anywhere}
+.stats dd small{font-size:var(--t-sm);font-weight:600;color:var(--ink-3);margin-left:4px}
+.stats .sub{display:block;margin-top:4px;font-size:var(--t-xs);font-weight:600}
+.sub.c-ok{color:var(--ok)} .sub.c-info{color:var(--info)} .sub.c-sig{color:var(--sig)} .sub.c-part{color:var(--part)}
+
+.feed ol{list-style:none;margin:0;padding:0}
+.feed li+li{border-top:1px solid var(--line)}
+.feed li a,.feed li .ev{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 4px;text-decoration:none;color:var(--ink);min-height:52px}
+.feed li a:hover{background:var(--surface-2)}
+.ev-i{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.ev-t{display:block;font-weight:650;font-size:var(--t-sm)}
+.ev-s{display:block;font-size:var(--t-xs);color:var(--ink-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev-a{font-size:var(--t-xs);color:var(--ink-3);white-space:nowrap}
+.feed-foot{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+@media (min-width:640px){.feed-foot{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.feed-foot b{display:block;font-size:var(--t-sm)}
+.feed-foot span{font-size:var(--t-xs);color:var(--ink-3)}
+.bal b{display:flex;align-items:center;gap:6px;color:var(--ok)}
+.bal.off b{color:var(--bad)}
+
+.roles{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:760px){.roles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.role{display:grid;grid-template-columns:48px minmax(0,1fr) 20px;gap:14px;align-items:center;padding:14px 16px;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-lg);text-decoration:none;color:var(--ink);box-shadow:var(--shadow);transition:border-color .15s var(--ease),box-shadow .15s var(--ease)}
+.role:hover{border-color:var(--sig);box-shadow:var(--shadow-raise)}
+.tile{width:48px;height:48px;border-radius:12px;background:var(--sig-soft);border:1px solid var(--sig-line);display:flex;align-items:center;justify-content:center}
+.tile svg{width:34px;height:34px}
+.role .k{display:block;font-size:var(--t-xs);color:var(--ink-3);font-weight:600}
+.role .t{display:block;font-weight:700}
+.role .d{display:block;font-size:var(--t-sm);color:var(--ink-2);margin-top:2px}
+.role .go{color:var(--ink-3)}
+
+.sentence{font-size:clamp(18px,3.6vw,22px);line-height:2.15;font-weight:500;color:var(--ink-2)}
+.tok{display:inline-block;vertical-align:baseline;min-height:38px;line-height:1.3;padding:5px 12px;margin:2px 1px;border-radius:999px;border:1px solid var(--sig-line);background:var(--sig-soft);
+  color:var(--ink);font:inherit;font-weight:650;font-size:inherit;cursor:pointer;max-width:100%}
+select.tok{appearance:none;-webkit-appearance:none;padding-right:28px;background-image:linear-gradient(45deg,transparent 50%,var(--ink-3) 50%),linear-gradient(135deg,var(--ink-3) 50%,transparent 50%);
+  background-position:calc(100% - 15px) 55%,calc(100% - 10px) 55%;background-size:5px 5px;background-repeat:no-repeat}
+input.tok{width:4.2em;text-align:center;cursor:text}
+button.tok{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:min(100%,22ch)}
+.tok:hover{border-color:var(--sig)}
+.tok[aria-invalid="true"]{border-color:var(--bad);background:var(--bad-soft)}
+.issues{color:var(--bad);font-size:var(--t-sm);margin-top:8px}
+.issues:empty{display:none}
+
+details.how{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow)}
+details.how summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;cursor:pointer;font-weight:700;min-height:52px}
+details.how summary::-webkit-details-marker{display:none}
+details.how summary .ic{transition:transform .2s var(--ease)}
+details.how[open] summary .ic{transform:rotate(180deg)}
+.steps{list-style:none;margin:0;padding:0 20px 20px;display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:640px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1000px){.steps{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.steps li{padding:14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface-2)}
+.steps .n{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--sig);color:var(--sig);font-weight:700;font-size:var(--t-sm)}
+.steps h3{margin-top:10px}
+.steps p{margin-top:4px;font-size:var(--t-sm);color:var(--ink-2)}
+
+.cards{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:700px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1100px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.vcard{display:flex;flex-direction:column;gap:10px;padding:16px;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--ink-3);border-radius:var(--r-lg);
+  text-decoration:none;color:var(--ink);box-shadow:var(--shadow);min-width:0}
+.vcard:hover{box-shadow:var(--shadow-raise)}
+.vcard.e-info{border-top-color:var(--info)} .vcard.e-due{border-top-color:var(--due)} .vcard.e-appeal{border-top-color:var(--appeal)}
+.vcard.e-ok{border-top-color:var(--ok)} .vcard.e-part{border-top-color:var(--part)} .vcard.e-bad{border-top-color:var(--bad)} .vcard.e-wait{border-top-color:var(--line-strong)}
+.vcard h3{font-size:var(--t-md);overflow-wrap:anywhere}
+.vcard .meta{display:flex;justify-content:space-between;gap:8px;font-size:var(--t-xs);color:var(--ink-3);flex-wrap:wrap}
+.vcard .goal{font-size:var(--t-sm);color:var(--ink-2)}
+.bar{height:6px;border-radius:99px;background:var(--idle-soft);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--sig);border-radius:99px}
+
+.table{width:100%;border-collapse:collapse;font-size:var(--t-sm)}
+.table th{text-align:left;font-size:var(--t-xs);color:var(--ink-3);font-weight:650;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.table td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.table tr:last-child td{border-bottom:0}
+.table tbody tr{cursor:pointer}
+.table tbody tr:hover td{background:var(--surface-2)}
+.table a{font-weight:650;text-decoration:none;display:inline-block;min-height:36px;padding-top:8px}
+.rows{list-style:none;margin:0;padding:0}
+.rows li+li{border-top:1px solid var(--line)}
+.rows a{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:12px 2px;text-decoration:none;color:var(--ink);min-height:56px}
+.rows .r1{font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rows .r2{font-size:var(--t-xs);color:var(--ink-3);grid-column:1/2}
+.rows .r3{grid-row:1/3;grid-column:2;align-self:center;text-align:right}
+.only-wide{display:none}
+@media (min-width:768px){.only-wide{display:block}.only-narrow{display:none}}
+
+.dl{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:8px 16px;margin:0;font-size:var(--t-sm)}
+.dl dt{color:var(--ink-3)}
+.dl dd{margin:0;overflow-wrap:anywhere;text-align:right}
+.dl dd a{display:inline-flex;align-items:center;min-height:36px}
+.timeline{list-style:none;margin:0;padding:0}
+.timeline li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;padding-bottom:14px;position:relative}
+.timeline li::before{content:"";position:absolute;left:10px;top:20px;bottom:0;width:1px;background:var(--line)}
+.timeline li:last-child::before{display:none}
+.timeline .b{width:21px;height:21px;border-radius:50%;border:1.5px solid var(--line-strong);background:var(--surface);display:flex;align-items:center;justify-content:center}
+.timeline li.done .b{border-color:var(--sig);background:var(--sig-soft);color:var(--sig)}
+.timeline li.done .b svg{width:13px;height:13px;stroke-width:2.4}
+.timeline .w{font-weight:650;font-size:var(--t-sm)}
+.timeline .s{font-size:var(--t-xs);color:var(--ink-3)}
+.verdict{display:flex;align-items:center;gap:14px}
+.ring{width:64px;height:64px;flex:none}
+
+.tx{margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface-2);font-size:var(--t-sm)}
+.tx ol{list-style:none;margin:0 0 10px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.tx li{display:flex;flex-direction:column;gap:6px;font-size:11.5px;color:var(--ink-3);font-weight:600;line-height:1.25}
+.tx li .b{height:4px;border-radius:99px;background:var(--line)}
+.tx li.done{color:var(--ink-2)} .tx li.done .b{background:var(--sig)}
+.tx li.now{color:var(--ink)} .tx li.now .b{background:linear-gradient(90deg,var(--sig) 50%,var(--line) 50%);background-size:200% 100%;animation:pulse 1.2s linear infinite}
+.tx li.fail{color:var(--bad)} .tx li.fail .b{background:var(--bad)}
+@keyframes pulse{from{background-position:100% 0}to{background-position:0 0}}
+.tx.bad{border-color:var(--bad);background:var(--bad-soft)}
+.tx.good{border-color:var(--ok)}
+.tx .msg b{display:block}
+.tx .msg .btn{margin-top:10px}
+
+.toasts{position:fixed;z-index:60;left:12px;right:12px;bottom:calc(var(--nav-h) + 12px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+@media (min-width:1024px){.toasts{left:auto;right:24px;bottom:24px;align-items:flex-end}}
+.toast{pointer-events:auto;max-width:420px;padding:12px 16px;border-radius:var(--r-md);background:var(--ink);color:var(--ground);box-shadow:var(--shadow-pop);font-size:var(--t-sm);font-weight:600}
+.toast.bad{background:var(--bad);color:#fff}
+
+dialog{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);color:var(--ink);padding:0;width:min(520px,calc(100vw - 24px));max-height:calc(100vh - 24px);box-shadow:var(--shadow-pop)}
+dialog::backdrop{background:rgba(12,15,20,.45)}
+@media (max-width:599px){dialog{margin:auto auto 0;width:100%;max-width:100%;border-radius:var(--r-lg) var(--r-lg) 0 0;max-height:90vh}}
+.dlg-body{padding:20px;overflow:auto;max-height:inherit}
+.dlg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.dlg-head h2{font-size:var(--t-xl)}
+.option{display:block;width:100%;text-align:left;padding:14px 16px;margin-bottom:10px;border:1px solid var(--line-strong);border-radius:var(--r-md);background:var(--surface);color:var(--ink);font:inherit;cursor:pointer}
+.option:hover{border-color:var(--sig)}
+.option b{display:block}
+.option span{display:block;font-size:var(--t-sm);color:var(--ink-2);margin-top:2px}
+details.tune{margin-top:12px;border-top:1px solid var(--line)}
+details.tune summary{cursor:pointer;padding:12px 0;font-weight:650;font-size:var(--t-sm);min-height:44px;display:flex;align-items:center}
+.tune-body{padding-bottom:8px}
+
+.skel{border-radius:var(--r-md);background:linear-gradient(90deg,var(--surface-2),var(--idle-soft),var(--surface-2));background-size:200% 100%;animation:sk 1.4s ease infinite}
+@keyframes sk{from{background-position:100% 0}to{background-position:-100% 0}}
+.empty{text-align:center;padding:28px 12px;color:var(--ink-2)}
+.empty h3{color:var(--ink)}
+.empty p{margin-top:6px;font-size:var(--t-sm)}
+.empty .btn{margin-top:14px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.toolbar .input{flex:1 1 220px;width:auto}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:640px){.kv{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.kv>div{padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface-2);min-width:0}
+.kv b{display:block;font-size:var(--t-lg);overflow-wrap:anywhere}
+.kv span{font-size:var(--t-xs);color:var(--ink-3)}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <a class="brand" href="#/" aria-label="VowKeep home"><span id="brandMark"></span>VowKeep</a>
+  <span class="env" id="envBadge" hidden></span>
+  <span class="grow"></span>
+  <button class="iconbtn" id="themeBtn" type="button" aria-label="Switch theme"></button>
+  <button class="walletbtn" id="walletBtn" type="button"><span class="dot" aria-hidden="true"></span><span class="lbl" id="walletLbl">Connect wallet</span></button>
+</header>
+<div class="netbar" id="netBanner" role="alert" hidden><span>Your wallet is on another network. VowKeep runs on GenLayer Studio.</span><button class="btn btn-secondary sm" id="switchNet" type="button">Switch network</button></div>
+<nav class="tabs" aria-label="Main">
+  <a class="brand side-brand" href="#/" aria-label="VowKeep home"><span id="brandMark2"></span>VowKeep</a>
+  <ul id="tabList"></ul>
+  <div class="side-foot">
+    <p class="xs" style="margin-bottom:6px">Theme</p>
+    <div class="seg" id="themeSeg" role="group" aria-label="Theme"></div>
+  </div>
+</nav>
+<main id="main" tabindex="-1"></main>
+<footer class="foot">
+  <p>Contract <span class="addr" id="footAddr">not set</span></p>
+  <p id="footMode">Every number on this page is read from the contract.</p>
+</footer>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<dialog id="dlg" aria-labelledby="dlgTitle"><div class="dlg-body" id="dlgBody"></div></dialog>
+
+<script type="module">
+import { createClient, createAccount } from "https://esm.sh/genlayer-js@latest";
+import { studionet } from "https://esm.sh/genlayer-js@latest/chains";
+
+const DEFAULT_CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000";
+const ZERO = "0x0000000000000000000000000000000000000000";
+const WEI = 1000000000000000000n;
+const $ = (id) => document.getElementById(id);
+const okAddr = (a) => /^0x[0-9a-fA-F]{40}$/.test(String(a || ""));
+
+const ICONS = {
+  home: ["M3 11l9-8 9 8", "M5 10v10h14V10"],
+  plus: ["M12 5v14M5 12h14"],
+  list: ["M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"],
+  user: ["M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z", "M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"],
+  jar: ["M8 3h8M9 3v3l-3 3v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9l-3-3V3", "M12 17s-3-1.8-3-3.6a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 1.8-3 3.6-3 3.6z"],
+  x: ["M6 6l12 12M18 6L6 18"],
+  copy: ["M9 9h11v11H9z", "M5 15H4V4h11v1"],
+  arrow: ["M5 12h14M13 6l6 6-6 6"],
+  back: ["M15 6l-6 6 6 6"],
+  sun: ["M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z", "M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"],
+  moon: ["M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"],
+  check: ["M5 12l5 5 9-10"],
+  chev: ["M6 9l6 6 6-6"],
+  flag: ["M5 21V4", "M5 4h11l-2 4 2 4H5"],
+  eye: ["M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z", "M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"],
+  scale: ["M12 3v18M5 21h14", "M5 7h14", "M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0z"],
+  coin: ["M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z", "M9 12h6M12 9v6"],
+  out: ["M14 4h6v6M20 4l-9 9", "M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"],
+  link: ["M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1", "M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"],
+};
+const SVGNS = "http://www.w3.org/2000/svg";
+function icon(name, size) {
+  const s = document.createElementNS(SVGNS, "svg");
+  s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("class", "ic"); s.setAttribute("aria-hidden", "true");
+  if (size) { s.style.width = size + "px"; s.style.height = size + "px"; }
+  for (const d of ICONS[name] || []) { const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", d); s.appendChild(p); }
+  return s;
+}
+function svgFrom(markup) {
+  const t = document.createElement("template");
+  t.innerHTML = markup.trim();
+  return t.content.firstElementChild;
+}
+const MARK = `<svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="17" r="11" fill="none" stroke="var(--sig)" stroke-width="2.6"/><path d="M11 17.2l3.4 3.4 6.6-7.2" fill="none" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 4.5h6l-3 3.6z" fill="var(--sig)"/></svg>`;
+const HERO_ART = `<svg viewBox="0 0 400 300" role="img" aria-label="A goal sheet with ticked days and a stamped KEPT seal">
+<rect x="34" y="34" width="250" height="226" rx="14" fill="var(--surface)" stroke="var(--line-strong)"/>
+<rect x="34" y="34" width="250" height="46" rx="14" fill="var(--surface-2)"/><rect x="34" y="66" width="250" height="14" fill="var(--surface-2)"/>
+<line x1="34" y1="80" x2="284" y2="80" stroke="var(--line)"/>
+<rect x="54" y="50" width="96" height="10" rx="5" fill="var(--ink-3)" opacity=".55"/><rect x="214" y="49" width="50" height="12" rx="6" fill="var(--sig-soft)" stroke="var(--sig-line)"/>
+<g fill="none" stroke="var(--line-strong)" stroke-width="1.2">
+${Array.from({ length: 21 }, (_, i) => `<rect x="${54 + (i % 7) * 31}" y="${96 + Math.floor(i / 7) * 34}" width="24" height="24" rx="6"/>`).join("")}
+</g>
+<g fill="none" stroke="var(--sig)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+${[0, 1, 2, 4, 5, 7, 8, 9, 11, 12, 14, 15].map((i) => `<path d="M${60 + (i % 7) * 31} ${108 + Math.floor(i / 7) * 34}l4 4 7-8"/>`).join("")}
+</g>
+<rect x="54" y="214" width="210" height="8" rx="4" fill="var(--idle-soft)"/><rect x="54" y="214" width="150" height="8" rx="4" fill="var(--sig)"/>
+<rect x="54" y="232" width="70" height="8" rx="4" fill="var(--ink-3)" opacity=".4"/>
+<g class="stamp">
+<circle cx="300" cy="196" r="62" fill="var(--surface)" stroke="var(--sig)" stroke-width="3"/>
+<circle cx="300" cy="196" r="50" fill="none" stroke="var(--sig)" stroke-width="1.4" stroke-dasharray="4 4"/>
+<path d="M276 194l16 16 32-34" fill="none" stroke="var(--sig)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="300" y="236" text-anchor="middle" font-family="inherit" font-size="13" font-weight="700" letter-spacing="3" fill="var(--sig)">KEPT</text>
+</g>
+</svg>`;
+const ROLE_ART = {
+  make: `<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="18" cy="22" r="13" fill="none" stroke="var(--sig)" stroke-width="2"/><circle cx="18" cy="22" r="7.5" fill="none" stroke="var(--sig)" stroke-width="2"/><circle cx="18" cy="22" r="2.4" fill="var(--sig)"/><path d="M18 22L33 7" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/><path d="M29 5h5v5" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  keep: `<svg viewBox="0 0 40 40" aria-hidden="true"><rect x="5" y="5" width="20" height="26" rx="3" fill="none" stroke="var(--ink)" stroke-width="2"/><path d="M10 12h10M10 17h10M10 22h6" stroke="var(--ink-3)" stroke-width="2" stroke-linecap="round"/><circle cx="26" cy="26" r="7" fill="var(--surface)" stroke="var(--sig)" stroke-width="2.2"/><path d="M31 31l5 5" stroke="var(--sig)" stroke-width="2.6" stroke-linecap="round"/><path d="M23 26l2.2 2.2 4-4.4" fill="none" stroke="var(--sig)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  pool: `<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M13 5h14M14 5v5l-5 5v16a4 4 0 0 0 4 4h14a4 4 0 0 0 4-4V15l-5-5V5" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/><path d="M20 30s-6-3.4-6-7.2a3.2 3.2 0 0 1 6-1.6 3.2 3.2 0 0 1 6 1.6C26 26.6 20 30 20 30z" fill="var(--sig-soft)" stroke="var(--sig)" stroke-width="2" stroke-linejoin="round"/></svg>`,
+};
+
+function h(tag, props, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (v === undefined || v === null || v === false) continue;
+    if (k === "class") el.className = v;
+    else if (k === "text") el.textContent = v;
+    else if (k === "style") el.style.cssText = v;
+    else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v === true ? "" : v);
+  }
+  for (const kid of kids.flat(3)) {
+    if (kid === null || kid === undefined || kid === false) continue;
+    el.appendChild(typeof kid === "string" || typeof kid === "number" ? document.createTextNode(String(kid)) : kid);
+  }
+  return el;
+}
+const clear = (el) => { while (el.firstChild) el.removeChild(el.firstChild); return el; };
+const put = (el, ...kids) => { clear(el); for (const k of kids.flat(3)) if (k !== null && k !== undefined && k !== false) el.append(typeof k === "string" ? document.createTextNode(k) : k); return el; };
+const short = (a) => (a ? a.slice(0, 6) + "…" + a.slice(-4) : "-");
+const same = (a, b) => !!a && !!b && String(a).toLowerCase() === String(b).toLowerCase();
+function toast(text, bad) {
+  const t = h("div", { class: "toast" + (bad ? " bad" : ""), text });
+  $("toasts").appendChild(t);
+  setTimeout(() => t.remove(), 4500);
+}
+async function copyText(text, what) {
+  try { await navigator.clipboard.writeText(text); toast((what || "Address") + " copied"); } catch (e) { toast("Copying is not available in this browser", true); }
+}
+
+function genStr(w, dp = 2) {
+  let wei;
+  try { wei = BigInt(w); } catch (e) { return String(w); }
+  const neg = wei < 0n; if (neg) wei = -wei;
+  const frac = (wei % WEI).toString().padStart(18, "0").slice(0, dp).replace(/0+$/, "");
+  const whole = (wei / WEI).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return (neg ? "-" : "") + whole + (frac ? "." + frac : "");
+}
+const pct = (bps) => (Number(bps) / 100).toFixed(Number(bps) % 100 === 0 ? 0 : 1) + "%";
+const nowSec = () => Math.floor(Date.now() / 1000);
+function span(sec) {
+  sec = Math.max(0, Math.round(sec));
+  if (sec < 60) return sec + "s";
+  if (sec < 3600) return Math.round(sec / 60) + " min";
+  if (sec < 86400) { const hh = Math.floor(sec / 3600), mm = Math.round((sec % 3600) / 60); return hh + "h" + (mm ? " " + mm + "m" : ""); }
+  const d = Math.floor(sec / 86400), hh = Math.round((sec % 86400) / 3600);
+  return d + "d" + (hh && d < 7 ? " " + hh + "h" : "");
+}
+function timeAgo(epoch) {
+  const e = Number(epoch);
+  if (!e) return "";
+  const d = nowSec() - e;
+  if (d < 0) return "in " + span(-d);
+  if (d < 45) return "just now";
+  if (d < 86400 * 30) return span(d) + " ago";
+  return new Date(e * 1000).toLocaleDateString(undefined, { day: "numeric", month: "short" });
+}
+const fmtEpoch = (e) => { try { return new Date(Number(e) * 1000).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }); } catch (x) { return String(e); } };
+const fmtDay = (e) => new Date(Number(e) * 1000).toLocaleDateString(undefined, { day: "numeric", month: "short" });
+
+function resolveContract() {
+  try {
+    const q = new URLSearchParams(location.search).get("contract");
+    if (okAddr(q)) { try { localStorage.setItem("vowkeep.contract", q); } catch (e) {} return q; }
+  } catch (e) {}
+  try { const s = localStorage.getItem("vowkeep.contract"); if (okAddr(s)) return s; } catch (e) {}
+  return DEFAULT_CONTRACT_ADDRESS;
+}
+const CONTRACT_ADDRESS = resolveContract();
+const hasContract = CONTRACT_ADDRESS !== ZERO;
+$("footAddr").textContent = hasContract ? CONTRACT_ADDRESS : "not set";
+$("brandMark").appendChild(svgFrom(MARK));
+$("brandMark2").appendChild(svgFrom(MARK));
+const EXPLORER = (a) => "https://explorer-studio.genlayer.com/address/" + a;
+
+/* ---------- theme ---------- */
+function themePref() { return document.documentElement.dataset.themePref || "auto"; }
+function applyTheme(pref) {
+  const dark = pref === "dark" || (pref !== "light" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  document.documentElement.dataset.themePref = pref;
+  $("themeColor").setAttribute("content", dark ? "#0C0F14" : "#ECEFF3");
+  try { localStorage.setItem("vowkeep.theme", pref); } catch (e) {}
+  drawTheme();
+}
+function drawTheme() {
+  const dark = document.documentElement.dataset.theme === "dark";
+  put($("themeBtn"), icon(dark ? "sun" : "moon", 18));
+  $("themeBtn").setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
+  put($("themeSeg"), ["auto", "light", "dark"].map((p) => h("button", { type: "button", "aria-pressed": String(themePref() === p), text: p[0].toUpperCase() + p.slice(1), onclick: () => applyTheme(p) })));
+}
+$("themeBtn").addEventListener("click", () => applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"));
+if (window.matchMedia) matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { if (themePref() === "auto") applyTheme("auto"); });
+drawTheme();
+
+/* ---------- wallet and network ---------- */
+const readClient = createClient({ chain: studionet });
+let client = null, account = null, usingInjected = false, walletKind = "";
+const net = { ok: true };
+const RPC_URL = studionet.rpcUrls?.default?.http?.[0];
+const hexChainId = () => "0x" + Number(studionet.id).toString(16);
+async function checkChain() {
+  if (!usingInjected || !window.ethereum) { net.ok = true; drawNet(); return true; }
+  try { const cur = await window.ethereum.request({ method: "eth_chainId" }); net.ok = String(cur).toLowerCase() === hexChainId().toLowerCase(); }
+  catch (e) { net.ok = true; }
+  drawNet();
+  return net.ok;
+}
+async function switchChain() {
+  try { await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: hexChainId() }] }); }
+  catch (e) {
+    if (e?.code === 4001) throw e;
+    await window.ethereum.request({ method: "wallet_addEthereumChain", params: [{
+      chainId: hexChainId(), chainName: studionet.name || "GenLayer Studio",
+      nativeCurrency: studionet.nativeCurrency || { name: "GEN", symbol: "GEN", decimals: 18 },
+      rpcUrls: studionet.rpcUrls?.default?.http || [] }] });
+  }
+  return checkChain();
+}
+async function trySwitch() {
+  try { if (await switchChain()) toast("Switched to GenLayer Studio"); else toast("The wallet is still on another network", true); }
+  catch (e) { toast(explain(e), true); }
+}
+function drawNet() { $("netBanner").hidden = net.ok || !account; drawWallet(); }
+$("switchNet").addEventListener("click", trySwitch);
+if (window.ethereum?.on) {
+  window.ethereum.on("chainChanged", () => checkChain());
+  window.ethereum.on("accountsChanged", (accs) => {
+    if (!usingInjected) return;
+    if (!accs || !accs.length) return disconnect();
+    account = accs[0]; client = createClient({ chain: studionet, account });
+    toast("Wallet account changed"); route();
+  });
+}
+function drawWallet() {
+  const btn = $("walletBtn");
+  btn.classList.toggle("on", !!account && net.ok);
+  btn.classList.toggle("warn", !!account && !net.ok);
+  const narrow = window.matchMedia && matchMedia("(max-width: 419px)").matches;
+  $("walletLbl").textContent = account ? (narrow ? account.slice(0, 4) + "…" + account.slice(-4) : short(account)) : narrow ? "Connect" : "Connect wallet";
+  btn.setAttribute("aria-label", account ? "Wallet " + account + ", open wallet menu" : "Connect wallet");
+}
+async function balanceOf(addr) {
+  if (!RPC_URL || !addr) return null;
+  try {
+    const res = await fetch(RPC_URL, { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_getBalance", params: [addr, "latest"] }) });
+    const body = await res.json();
+    return body && typeof body.result === "string" ? BigInt(body.result) : null;
+  } catch (e) { return null; }
+}
+const TEST_KEY_SLOT = "vowkeep.testsession";
+const readTestKey = () => { try { const v = sessionStorage.getItem(TEST_KEY_SLOT); return /^0x[0-9a-f]{64}$/.test(v || "") ? v : ""; } catch (e) { return ""; } };
+const writeTestKey = (v) => { try { if (v) sessionStorage.setItem(TEST_KEY_SLOT, v); else sessionStorage.removeItem(TEST_KEY_SLOT); } catch (e) {} };
+function randomKey() { const b = new Uint8Array(32); crypto.getRandomValues(b); return "0x" + Array.from(b, (x) => x.toString(16).padStart(2, "0")).join(""); }
+function useLocalAccount(pk, kind) {
+  const acct = createAccount(pk);
+  account = acct.address; usingInjected = false; walletKind = kind;
+  client = createClient({ chain: studionet, account: acct });
+  net.ok = true; drawNet();
+}
+function startTestSession(silent) {
+  let pk = readTestKey();
+  if (!pk) { pk = randomKey(); writeTestKey(pk); }
+  useLocalAccount(pk, "test");
+  if (!silent) { closeDialog(); toast("Test session started. Request test GEN on the Pool page before staking."); route(); }
+}
+async function connectInjected(errEl) {
+  if (!window.ethereum) { errEl.textContent = "No browser wallet was found. Open this page in your wallet app's browser, or start a test session."; return; }
+  try {
+    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+    account = accounts[0]; usingInjected = true; walletKind = "injected";
+    client = createClient({ chain: studionet, account });
+    writeTestKey("");
+    if (!(await checkChain())) { try { await switchChain(); } catch (e) {} }
+    closeDialog(); toast("Wallet connected"); route();
+  } catch (e) { errEl.textContent = explain(e); }
+}
+function connectKey(input, errEl) {
+  let pk = input.value.trim();
+  if (/^[0-9a-fA-F]{64}$/.test(pk)) pk = "0x" + pk;
+  if (!/^0x[0-9a-fA-F]{64}$/.test(pk)) { input.setAttribute("aria-invalid", "true"); errEl.textContent = "A private key is 64 hexadecimal characters, optionally starting with 0x."; input.focus(); return; }
+  try { useLocalAccount(pk, "key"); writeTestKey(""); closeDialog(); toast("Account connected"); route(); }
+  catch (e) { errEl.textContent = "This key could not be used: " + explain(e); }
+}
+function disconnect() { writeTestKey(""); client = null; account = null; usingInjected = false; walletKind = ""; net.ok = true; drawNet(); closeDialog(); toast("Disconnected"); route(); }
+
+/* ---------- dialogs ---------- */
+const dlg = $("dlg");
+let dlgResolve = null, dlgReturnFocus = null;
+function openDialog(title, ...content) {
+  if (!dlg.open) dlgReturnFocus = document.activeElement;
+  put($("dlgBody"),
+    h("div", { class: "dlg-head" }, h("h2", { id: "dlgTitle", text: title }),
+      h("button", { class: "iconbtn", type: "button", "aria-label": "Close", onclick: () => closeDialog(false) }, icon("x"))),
+    ...content);
+  if (!dlg.open) dlg.showModal();
+}
+function settle(value) { if (dlgResolve) { const r = dlgResolve; dlgResolve = null; r(value); } }
+function closeDialog(value) { settle(value); if (dlg.open) dlg.close(); }
+dlg.addEventListener("close", () => { settle(false); if (dlgReturnFocus && document.contains(dlgReturnFocus)) dlgReturnFocus.focus(); dlgReturnFocus = null; });
+dlg.addEventListener("click", (e) => { if (e.target === dlg) closeDialog(false); });
+function confirmAction({ title, intro, rows = [], note, confirm, danger, extra }) {
+  return new Promise((resolve) => {
+    openDialog(title,
+      intro ? h("p", { class: "muted", text: intro }) : null,
+      rows.length ? h("dl", { class: "dl", style: "margin-top:16px" }, rows.map(([k, v]) => [h("dt", { text: k }), h("dd", { text: v })])) : null,
+      extra || null,
+      note ? h("p", { class: "callout warn", style: "margin-top:16px", text: note }) : null,
+      h("div", { class: "actions", style: "margin-top:22px" },
+        h("button", { class: "btn btn-secondary", type: "button", text: "Go back", onclick: () => closeDialog(false) }),
+        h("button", { class: "btn " + (danger ? "btn-danger" : "btn-primary"), type: "button", id: "dlgConfirm", text: confirm, onclick: () => closeDialog(true) })));
+    dlgResolve = resolve;
+    setTimeout(() => $("dlgConfirm")?.focus(), 30);
+  });
+}
+async function openWallet() {
+  const err = h("p", { class: "err", role: "alert" });
+  const pk = h("input", { class: "input", id: "pkIn", type: "password", placeholder: "0x followed by 64 characters", autocapitalize: "off", autocomplete: "off", spellcheck: "false" });
+  const addrIn = h("input", { class: "input", id: "addrIn", value: hasContract ? CONTRACT_ADDRESS : "", placeholder: "0x followed by 40 characters", autocapitalize: "off", autocomplete: "off", spellcheck: "false" });
+  const addrErr = h("p", { class: "err", role: "alert" });
+  const bal = h("span", { text: "…" });
+  const owed = h("span", { text: "…" });
+  const connected = account ? h("div", { class: "inset stack" },
+    h("div", { class: "row between wrap" }, h("span", { class: "small muted", text: walletKind === "test" ? "Test session" : walletKind === "key" ? "Private key account" : "Browser wallet" }),
+      h("span", { class: "small" }, "Balance ", bal, " GEN")),
+    h("p", { class: "addr small", text: account }),
+    h("p", { class: "small muted" }, "Claimable from VowKeep: ", owed, " GEN"),
+    h("div", { class: "actions" },
+      h("button", { class: "btn btn-secondary sm", type: "button", onclick: () => copyText(account) }, icon("copy", 16), "Copy address"),
+      h("button", { class: "btn btn-danger sm", type: "button", text: "Disconnect", onclick: disconnect }))) : null;
+  openDialog(account ? "Wallet" : "Connect a wallet",
+    connected,
+    h("div", { style: account ? "margin-top:20px" : null },
+      h("h3", { text: account ? "Switch account" : "Choose how to sign" }),
+      h("div", { style: "margin-top:12px" },
+        h("button", { class: "option", type: "button", onclick: () => connectInjected(err) }, h("b", { text: "Browser wallet" }), h("span", { text: "MetaMask, Rabby or any injected wallet. On a phone, open this page in your wallet app's browser." })),
+        h("button", { class: "option", type: "button", onclick: () => startTestSession(false) }, h("b", { text: "Test session" }), h("span", { text: "A throwaway Studio account that lives in this tab. The quickest way to try VowKeep." })))),
+    h("details", { class: "tune" }, h("summary", { text: "Use a Studio private key" }),
+      h("div", { class: "tune-body" },
+        h("div", { class: "field" }, h("label", { for: "pkIn", text: "Private key" }), pk, h("p", { class: "help", text: "Testnet keys only. The key stays in this tab and only signs your transactions." })),
+        h("button", { class: "btn btn-secondary block", type: "button", style: "margin-top:12px", text: "Use this key", onclick: () => connectKey(pk, err) }))),
+    err,
+    h("details", { class: "tune", open: !hasContract }, h("summary", { text: "Contract address" }),
+      h("div", { class: "tune-body" },
+        h("div", { class: "field" }, h("label", { for: "addrIn" }, "VowKeep contract", h("span", { class: "req", "aria-hidden": "true", text: "*" })), addrIn,
+          h("p", { class: "help", text: "A deployed VowKeep contract on GenLayer Studio. It is remembered in this browser; ?contract=0x... in the link also works." }), addrErr),
+        h("button", { class: "btn btn-secondary block", type: "button", style: "margin-top:12px", text: "Use this contract", onclick: () => {
+          const v = addrIn.value.trim();
+          if (!okAddr(v)) { addrIn.setAttribute("aria-invalid", "true"); addrErr.textContent = "Enter a 0x address with 40 hexadecimal characters."; addrIn.focus(); return; }
+          try { localStorage.setItem("vowkeep.contract", v); } catch (e) {}
+          location.search = "?contract=" + v;
+        } }))));
+  if (account) {
+    const b = await balanceOf(account); bal.textContent = b === null ? "unknown" : genStr(b);
+    if (hasContract) { try { owed.textContent = genStr(await read("get_pending_withdrawal", [account])); } catch (e) { owed.textContent = "unknown"; } }
+    else owed.textContent = "0";
+  }
+}
+$("walletBtn").addEventListener("click", openWallet);
+
+/* ---------- contract calls and the transaction tracker ---------- */
+function unwrap(receipt) {
+  let v = receipt?.consensus_data?.leader_receipt?.[0]?.result?.payload?.readable;
+  if (v === undefined) return null;
+  for (let i = 0; i < 3; i++) {
+    if (typeof v !== "string") break;
+    const t = v.trim();
+    if (!(t.startsWith("{") || t.startsWith("[") || t.startsWith('"'))) break;
+    try { v = JSON.parse(v); } catch (e) { break; }
+  }
+  return v;
+}
+const read = (functionName, args = []) => readClient.readContract({ address: CONTRACT_ADDRESS, functionName, args });
+async function readJson(functionName, args = []) {
+  const raw = await read(functionName, args);
+  return typeof raw === "string" ? JSON.parse(raw) : raw;
+}
+function explain(e) {
+  const m = String(e?.shortMessage || e?.details || e?.message || e || "");
+  if (e?.code === 4001 || /user rejected|user denied|rejected the request|denied transaction/i.test(m)) return "You declined the request in your wallet. Nothing was sent.";
+  if (/insufficient funds|insufficient balance/i.test(m)) return "This account does not have enough GEN for this transaction.";
+  if (/failed to fetch|networkerror|network error|timeout|timed out|ECONN|load failed/i.test(m)) return "GenLayer Studio could not be reached. Check your connection and try again.";
+  return m.length > 320 ? m.slice(0, 320) + "…" : m || "Unknown error";
+}
+const busy = new Set();
+function txPanel() {
+  const steps = [["sign", "Signature"], ["sent", "Submitted"], ["accepted", "Accepted"], ["final", "Finalized"]];
+  const items = steps.map(([k, t]) => h("li", { "data-k": k }, h("span", { class: "b", "aria-hidden": "true" }), h("span", { text: t })));
+  const msg = h("div", { class: "msg" });
+  const el = h("div", { class: "tx", role: "status", "aria-live": "polite", hidden: true }, h("ol", { "aria-label": "Transaction progress" }, items), msg);
+  return {
+    el,
+    reset() { el.hidden = true; el.classList.remove("bad", "good"); items.forEach((li) => (li.className = "")); clear(msg); },
+    at(key, text) {
+      el.hidden = false; el.classList.remove("bad");
+      let reached = false;
+      for (const li of items) { if (li.dataset.k === key) { li.className = "now"; reached = true; } else li.className = reached ? "" : "done"; }
+      if (text !== undefined) put(msg, text);
+    },
+    accepted(text) { items.forEach((li) => (li.className = li.dataset.k === "final" ? "now" : "done")); el.classList.add("good"); if (text !== undefined) put(msg, text); },
+    final(text) { items.forEach((li) => (li.className = "done")); put(msg, text === undefined ? "Finalized. This result is now permanent." : text); },
+    fail(text, hint, action) {
+      el.hidden = false; el.classList.add("bad");
+      const cur = items.find((li) => li.className === "now") || items[0];
+      cur.className = "fail";
+      put(msg, h("b", { text }), hint ? h("div", { style: "margin-top:4px", text: hint }) : null, action || null);
+    },
+    note(text) { el.hidden = false; put(msg, text); },
+  };
+}
+function needClient() {
+  if (client) return true;
+  toast("Connect a wallet to continue", true);
+  openWallet();
+  return false;
+}
+async function write(ui, label, functionName, args, valueWei) {
+  if (!needClient()) return null;
+  const key = functionName + ":" + JSON.stringify(args);
+  if (busy.has(key)) return null;
+  busy.add(key);
+  ui.reset();
+  try {
+    if (usingInjected && !(await checkChain())) {
+      ui.at("sign", "Asking your wallet to switch to GenLayer Studio…");
+      let switched = false;
+      try { switched = await switchChain(); } catch (e) {}
+      if (!switched) {
+        ui.fail("Your wallet is on another network.", "VowKeep runs on GenLayer Studio. Switch, then try again.",
+          h("button", { class: "btn btn-secondary sm", type: "button", text: "Switch network", onclick: trySwitch }));
+        return null;
+      }
+    }
+    const value = valueWei ?? 0n;
+    if (value > 0n) {
+      const bal = await balanceOf(account);
+      if (bal !== null && bal < value) {
+        ui.at("sign");
+        ui.fail(`Not enough GEN: this needs ${genStr(value)} GEN and the account holds ${genStr(bal)} GEN.`,
+          isSandbox() ? "Request test GEN on the Pool page, then try again. Nothing was sent." : "Top up the account and try again. Nothing was sent.",
+          isSandbox() ? h("a", { class: "btn btn-secondary sm", href: "#/pool", text: "Get test GEN" }) : null);
+        return null;
+      }
+    }
+    ui.at("sign", usingInjected ? `Confirm ${label} in your wallet.` : `Signing ${label}…`);
+    const slow = setTimeout(() => ui.note("Still waiting for the wallet. Open your wallet app and look for a pending request."), 20000);
+    let hash;
+    try { hash = await client.writeContract({ address: CONTRACT_ADDRESS, functionName, args, value }); }
+    finally { clearTimeout(slow); }
+    ui.at("sent", h("span", {}, "Transaction ", h("span", { class: "addr", text: short(hash) }), " is with the validators. Checks that read the web can take a minute or two."));
+    const receipt = await client.waitForTransactionReceipt({ hash, status: "ACCEPTED", interval: 3000, retries: 200 });
+    const result = unwrap(receipt);
+    const lr = receipt?.consensus_data?.leader_receipt?.[0];
+    if (lr?.execution_result === "ERROR") {
+      ui.at("accepted");
+      ui.fail("The contract refused this call.", typeof result === "string" && result ? result.slice(0, 400) : "No reason was returned. Nothing changed.");
+      return null;
+    }
+    if (result && typeof result === "object" && result.rejected) {
+      ui.at("accepted");
+      ui.fail("Refused: " + result.rejected, `The ${genStr(result.refunded_wei)} GEN you sent was credited back to you. Withdraw it from the Mine page.`,
+        h("a", { class: "btn btn-secondary sm", href: "#/mine", text: "Open Mine" }));
+      return null;
+    }
+    ui.accepted("Accepted by validators. The result already counts; finalization follows.");
+    client.waitForTransactionReceipt({ hash, status: "FINALIZED", interval: 5000, retries: 200 })
+      .then(() => ui.final())
+      .catch(() => ui.note("Accepted. Finalization is taking longer than usual; the result stands unless it is appealed on the network."));
+    return result === null ? true : result;
+  } catch (e) {
+    ui.fail(explain(e));
+    return null;
+  } finally { busy.delete(key); }
+}
+async function runButton(btn, fn) {
+  if (!btn || btn.disabled) return;
+  const label = btn.textContent;
+  btn.disabled = true; btn.setAttribute("aria-busy", "true");
+  put(btn, h("span", { class: "spin", "aria-hidden": "true" }), label);
+  try { return await fn(); }
+  finally { if (document.contains(btn)) { btn.disabled = false; btn.removeAttribute("aria-busy"); btn.textContent = label; } }
+}
+
+/* ---------- shared state and helpers ---------- */
+const state = { cfg: null, goals: null, bootError: "" };
+async function boot() {
+  if (!hasContract) return;
+  try {
+    [state.cfg, state.goals] = await Promise.all([readJson("get_config"), readJson("get_goal_types")]);
+    state.bootError = "";
+    const b = $("envBadge");
+    b.hidden = false; b.textContent = state.cfg.mode === "sandbox" ? "Sandbox" : "Production";
+    $("footMode").textContent = (state.cfg.mode === "sandbox" ? "Sandbox build: vows can end within minutes so the whole flow can be tried on Studio. " : "Production build. ") + "Every number on this page is read from the contract.";
+  } catch (e) { state.bootError = explain(e); }
+}
+const isSandbox = () => state.cfg?.mode === "sandbox";
+const goalSpec = (k) => (state.goals || []).find((g) => g.goal_type === k);
+const NOUN = {
+  COMMITS: ["GitHub commit", "GitHub commits"], POSTS: ["published post", "published posts"],
+  FILE_UPDATE: ["public file update", "public file updates"], LOG_ENTRIES: ["public log entry", "public log entries"],
+};
+const GOAL_HINT = {
+  COMMITS: { title: "Ship the first release", goal: "Commits to github.com/OWNER/REPO, any branch" },
+  POSTS: { title: "Write every week", goal: "New posts on my public blog" },
+  FILE_UPDATE: { title: "Publish my progress note", goal: "PROGRESS.md gets a new dated entry" },
+  LOG_ENTRIES: { title: "Run twelve times", goal: "Dated run entries in my public training log" },
+};
+const noun = (k, n) => (NOUN[k] || ["item", "items"])[Number(n) === 1 ? 0 : 1];
+const vowLine = (v) => `${v.target} ${noun(v.goal_type, v.target)}`;
+function statusOf(v) {
+  const now = nowSec();
+  if (v.status === "ACTIVE") return now < Number(v.deadline_epoch) ? { label: "Running", tone: "info" } : { label: "Due for check", tone: "due" };
+  if (v.status === "CHECKED") return { label: "Checked: " + (v.verdict === "PARTIAL" ? "partial" : "missed"), tone: "wait" };
+  if (v.status === "APPEALED") return { label: "Under appeal", tone: "appeal" };
+  if (v.verdict === "MET") return { label: "Kept", tone: "ok" };
+  if (v.verdict === "PARTIAL") return { label: "Partly kept", tone: "part" };
+  return { label: "Missed", tone: "bad" };
+}
+const chip = (st) => h("span", { class: "status t-" + st.tone, text: st.label });
+function whenLine(v) {
+  const now = nowSec();
+  if (v.status === "ACTIVE") return now < Number(v.deadline_epoch) ? "Ends in " + span(Number(v.deadline_epoch) - now) : "Ended " + timeAgo(v.deadline_epoch) + ", ready to check";
+  if (v.status === "CHECKED") return now < Number(v.appeal_until) ? "Appeal window closes in " + span(Number(v.appeal_until) - now) : "Ready to finalize";
+  if (v.status === "APPEALED") return "Appeal review can run now";
+  return "Settled " + timeAgo(v.settled_epoch);
+}
+function progressOf(v) {
+  if (v.status === "ACTIVE") return null;
+  return Math.min(100, Math.round((Number(v.count) / Number(v.target)) * 100));
+}
+function gate(root) {
+  if (!hasContract) {
+    put(root, h("div", { class: "panel stack measure" },
+      h("h1", { text: "Connect VowKeep to a contract" }),
+      h("p", { class: "muted", text: "This page reads and writes a deployed VowKeep contract on GenLayer Studio. Add its address to begin. Reading needs nothing else; a wallet is only needed to make, check or settle vows." }),
+      h("button", { class: "btn btn-primary", type: "button", text: "Add contract address", onclick: openWallet })));
+    return true;
+  }
+  if (state.bootError) {
+    put(root, h("div", { class: "panel stack measure", role: "alert" },
+      h("h1", { text: "The contract could not be reached" }),
+      h("p", { class: "muted", text: state.bootError }),
+      h("p", { class: "xs addr", text: "Contract " + CONTRACT_ADDRESS }),
+      h("div", { class: "actions" },
+        h("button", { class: "btn btn-primary", type: "button", text: "Try again", onclick: async () => { state.bootError = ""; await boot(); route(); } }),
+        h("button", { class: "btn btn-secondary", type: "button", text: "Change contract", onclick: openWallet }))));
+    return true;
+  }
+  return false;
+}
+const skel = (hgt = 64, n = 1) => Array.from({ length: n }, () => h("div", { class: "skel", style: `height:${hgt}px;margin-bottom:10px`, "aria-hidden": "true" }));
+const failBox = (e, retry) => h("div", { class: "callout bad", role: "alert" }, h("b", { text: "Could not read the contract. " }), explain(e), " ",
+  retry ? h("button", { class: "btn btn-secondary sm", type: "button", style: "margin-top:8px", text: "Try again", onclick: retry }) : null);
+function connectPrompt(text) {
+  return h("div", { class: "inset stack" }, h("p", { class: "muted small", text }),
+    h("button", { class: "btn btn-primary block", type: "button", text: "Connect wallet", onclick: openWallet }));
+}
+function vowCard(v) {
+  const st = statusOf(v);
+  const pr = progressOf(v);
+  return h("a", { class: "vcard e-" + st.tone, href: "#/vow/" + v.id },
+    h("div", { class: "row between" }, chip(st), h("span", { class: "xs", text: "#" + v.id })),
+    h("h3", { text: v.title }),
+    h("p", { class: "goal", text: `${vowLine(v)} · ${genStr(v.stake)} GEN staked` }),
+    pr === null ? null : h("div", { class: "bar", role: "img", "aria-label": `${v.count} of ${v.target} counted` }, h("i", { style: `width:${pr}%` })),
+    h("div", { class: "meta" }, h("span", { text: whenLine(v) }), h("span", { text: "by " + short(v.maker) })));
+}
+function vowTable(items) {
+  const tbody = h("tbody", {}, items.map((v) => h("tr", { onclick: () => (location.hash = "#/vow/" + v.id) },
+    h("td", {}, h("a", { href: "#/vow/" + v.id, text: v.title }), h("div", { class: "xs", text: `#${v.id} · ${vowLine(v)}` })),
+    h("td", { text: genStr(v.stake) + " GEN" }),
+    h("td", { text: fmtDay(v.deadline_epoch) }),
+    h("td", { class: "xs", text: short(v.maker) }),
+    h("td", {}, chip(statusOf(v))))));
+  return h("div", {},
+    h("div", { class: "only-wide" }, h("table", { class: "table" }, h("thead", {}, h("tr", {}, ["Vow", "Stake", "Deadline", "Maker", "Status"].map((t) => h("th", { scope: "col", text: t })))), tbody)),
+    h("ul", { class: "rows only-narrow" }, items.map((v) => h("li", {}, h("a", { href: "#/vow/" + v.id },
+      h("span", { class: "r1", text: v.title }),
+      h("span", { class: "r2", text: `#${v.id} · ${genStr(v.stake)} GEN · ${whenLine(v)}` }),
+      h("span", { class: "r3" }, chip(statusOf(v))))))));
+}
+
+/* ---------- the vow draft shared by Home and Make ---------- */
+const draft = { goal: "COMMITS", target: "10", minutes: 10080, customDay: "", stake: "5", title: "", goalText: "", url: "" };
+function durationPresets() {
+  const base = [["1 day", 1440], ["3 days", 4320], ["1 week", 10080], ["2 weeks", 20160], ["30 days", 43200]];
+  const quick = isSandbox() ? [["2 min", 2], ["10 min", 10], ["1 hour", 60]] : [];
+  const min = Number(state.cfg?.min_duration_minutes || 1);
+  return [...quick, ...base].filter(([, m]) => m >= min);
+}
+const STAKES = ["1", "5", "10", "25", "50"];
+function minutesLabel(mins) {
+  const hit = durationPresets().find(([, m]) => m === mins);
+  return hit ? hit[0] : span(mins * 60);
+}
+function draftMinutes() {
+  if (draft.customDay) {
+    const end = Date.parse(draft.customDay + "T23:59:00Z");
+    return Math.ceil((end - Date.now()) / 60000);
+  }
+  return draft.minutes;
+}
+function urlHost(u) { const m = /^https:\/\/([A-Za-z0-9.-]+)(:[0-9]+)?(\/[^\s<>"']*)?$/.exec(String(u || "").trim()); return m ? m[1].toLowerCase() : null; }
+function draftProblems() {
+  const p = {};
+  const g = goalSpec(draft.goal);
+  const t = Number(draft.target);
+  if (!/^\d+$/.test(String(draft.target)) || t < g.min_target || t > g.max_target) p.target = g.min_target === g.max_target ? `This goal type always has a target of ${g.max_target}.` : `Target must be a whole number from ${g.min_target} to ${g.max_target}.`;
+  const mins = draftMinutes();
+  if (!(mins >= Number(state.cfg.min_duration_minutes)) || mins > Number(state.cfg.max_duration_minutes)) p.deadline = "Pick a deadline at least " + span(Number(state.cfg.min_duration_minutes) * 60) + " from now and within a year.";
+  const s = Number(draft.stake);
+  const minS = Number(BigInt(state.cfg.min_stake_wei) / WEI), maxS = Number(BigInt(state.cfg.max_stake_wei) / WEI);
+  if (!/^\d+$/.test(String(draft.stake)) || s < minS || s > maxS) p.stake = `Stake a whole number of GEN from ${minS} to ${maxS.toLocaleString()}.`;
+  const host = urlHost(draft.url);
+  if (!draft.url.trim()) p.url = "Add the public link that will prove the goal.";
+  else if (!host || !host.includes(".") || draft.url.length > Number(state.cfg.max_url)) p.url = "The evidence link must be a public https:// address.";
+  else if (g.hosts.length && !g.hosts.includes(host)) p.url = `${g.title} evidence must be on ${g.hosts.join(" or ")}.`;
+  return p;
+}
+function editEvidence(after) {
+  const g = goalSpec(draft.goal);
+  const inp = h("input", { class: "input", id: "evIn", value: draft.url, placeholder: g.example, inputmode: "url", autocapitalize: "off", autocomplete: "off", spellcheck: "false" });
+  const err = h("p", { class: "err", role: "alert" });
+  openDialog("Evidence link",
+    h("p", { class: "muted small", text: g.evidence + ". Validators read it at the deadline and only count items dated inside the vow window." }),
+    h("div", { class: "field", style: "margin-top:14px" }, h("label", { for: "evIn", text: "Public https:// link" }), inp,
+      h("p", { class: "help", text: "Example: " + g.example })), err,
+    h("div", { class: "actions", style: "margin-top:18px" },
+      h("button", { class: "btn btn-secondary", type: "button", text: "Use the example format", onclick: () => { inp.value = g.example; inp.focus(); } }),
+      h("button", { class: "btn btn-primary", type: "button", text: "Save link", onclick: () => {
+        const v = inp.value.trim();
+        if (!urlHost(v)) { inp.setAttribute("aria-invalid", "true"); err.textContent = "Enter a public https:// address."; return; }
+        draft.url = v; closeDialog(true); after();
+      } })));
+  setTimeout(() => inp.focus(), 40);
+}
+function composer(onChange) {
+  const issues = h("p", { class: "issues", role: "alert", id: "composerIssues" });
+  const fire = () => { draw(); onChange && onChange(); };
+  const target = h("input", { class: "tok", inputmode: "numeric", value: draft.target, "aria-label": "Target number", "aria-describedby": "composerIssues", oninput: (e) => { draft.target = e.target.value.trim(); validate(); onChange && onChange(); } });
+  const goal = h("select", { class: "tok", "aria-label": "Goal type", onchange: (e) => {
+    draft.goal = e.target.value; const g = goalSpec(draft.goal);
+    if (g.max_target === 1) draft.target = "1";
+    if (g.hosts.length && urlHost(draft.url) && !g.hosts.includes(urlHost(draft.url))) draft.url = "";
+    fire(); } }, state.goals.map((g) => h("option", { value: g.goal_type, selected: g.goal_type === draft.goal, text: NOUN[g.goal_type][1] })));
+  const dur = h("select", { class: "tok", "aria-label": "Deadline", onchange: (e) => { draft.minutes = Number(e.target.value); draft.customDay = ""; fire(); } },
+    durationPresets().map(([l, m]) => h("option", { value: String(m), selected: !draft.customDay && m === draft.minutes, text: "in " + l })),
+    draft.customDay ? h("option", { value: String(draft.minutes), selected: true, text: "by " + draft.customDay }) : null);
+  const stake = h("select", { class: "tok", "aria-label": "Stake in GEN", onchange: (e) => { draft.stake = e.target.value; fire(); } },
+    [...new Set([...STAKES, draft.stake])].sort((a, b) => Number(a) - Number(b)).map((s) => h("option", { value: s, selected: s === draft.stake, text: s + " GEN" })));
+  const ev = h("button", { class: "tok", type: "button", "aria-label": "Evidence link", onclick: () => editEvidence(fire), text: urlHost(draft.url) || "a public link" });
+  const wrap = h("div", {});
+  function validate() {
+    const p = draftProblems();
+    target.setAttribute("aria-invalid", p.target ? "true" : "false");
+    dur.setAttribute("aria-invalid", p.deadline ? "true" : "false");
+    stake.setAttribute("aria-invalid", p.stake ? "true" : "false");
+    ev.setAttribute("aria-invalid", p.url && draft.url ? "true" : "false");
+    put(issues, [p.target, p.deadline, p.stake, draft.url ? p.url : null].filter(Boolean).join(" "));
+    return p;
+  }
+  function draw() {
+    target.value = draft.target;
+    if (goalSpec(draft.goal).max_target === 1) target.setAttribute("readonly", ""); else target.removeAttribute("readonly");
+    ev.textContent = urlHost(draft.url) || "a public link";
+    put(wrap, h("p", { class: "sentence" }, "I vow to reach ", target, " ", goal, " ", dur, ", staking ", stake, ", proven by ", ev, "."), issues);
+    validate();
+  }
+  draw();
+  wrap._validate = validate;
+  return wrap;
+}
+
+/* =====================================================================
+   HOME
+   ===================================================================== */
+const EVENT = {
+  CREATED: (e) => ["Vow #" + e.vow_id + " made", genStr(e.amount) + " GEN staked on " + noun(e.detail, 2), "plus", "t-info"],
+  CHECKED: (e) => ["Vow #" + e.vow_id + " checked", verdictText(e.detail), "eye", "t-due"],
+  APPEALED: (e) => ["Appeal filed on #" + e.vow_id, genStr(e.amount) + " GEN bond", "scale", "t-appeal"],
+  APPEAL_REVIEWED: (e) => ["Appeal on #" + e.vow_id + " " + (e.detail === "upheld" ? "upheld" : "rejected"), e.detail === "upheld" ? "Bond refunded" : "Bond sent to the pool", "scale", "t-appeal"],
+  SETTLED: (e) => ["Vow #" + e.vow_id + " settled", genStr(e.amount) + " GEN back to the maker, " + verdictText(e.detail), "check", "t-ok"],
+  DISTRIBUTED: (e) => ["Pool sent to " + (e.detail || "beneficiary"), genStr(e.amount) + " GEN", "jar", "t-part"],
+  BENEFICIARY_SET: (e) => ["Beneficiary set", e.detail, "jar", "t-wait"],
+  WITHDRAWN: (e) => ["Withdrawal", genStr(e.amount) + " GEN to " + short(e.actor), "out", "t-wait"],
+  OWNER_CHANGED: (e) => ["Owner changed", short(e.detail), "user", "t-wait"],
+};
+function verdictText(detail) {
+  const [v, frac] = String(detail || "").split(" ");
+  const word = { MET: "kept", PARTIAL: "partly kept", MISSED: "missed" }[v] || String(v || "").toLowerCase();
+  return frac ? `${word} (${frac})` : word;
+}
+function feedItem(e) {
+  const f = EVENT[e.kind] || ((x) => [x.kind, "", "list", "t-wait"]);
+  const [title, sub, ic, tone] = f(e);
+  const inner = [h("span", { class: "ev-i " + tone, "aria-hidden": "true" }, icon(ic, 16)),
+    h("span", { style: "min-width:0" }, h("span", { class: "ev-t", text: title }), h("span", { class: "ev-s", text: sub })),
+    h("span", { class: "ev-a", text: timeAgo(e.epoch) })];
+  return h("li", {}, e.vow_id ? h("a", { href: "#/vow/" + e.vow_id }, inner) : h("a", { href: "#/pool" }, inner));
+}
+async function viewHome(root) {
+  if (gate(root)) return;
+  const live = h("span", { class: "livepill" }, h("i", { "aria-hidden": "true" }), h("span", { text: "Reading the contract…" }));
+  const stats = h("dl", { class: "stats", "aria-busy": "true" }, Array.from({ length: 4 }, () => h("div", {}, h("div", { class: "skel", style: "height:48px" }))));
+  const feedList = h("ol", {}, Array.from({ length: 4 }, () => h("li", {}, h("div", { class: "skel", style: "height:40px;margin:6px 0" }))));
+  const feedFoot = h("div", { class: "feed-foot" });
+  const latest = h("div", {}, skel(120, 2));
+  const go = h("a", { class: "btn btn-primary", href: "#/make" }, "Review and stake", icon("arrow", 18));
+  const comp = composer(() => {});
+  const role = (art, k, t, d, href) => h("a", { class: "role", href }, h("span", { class: "tile" }, svgFrom(ROLE_ART[art])),
+    h("span", {}, h("span", { class: "k", text: k }), h("span", { class: "t", text: t }), h("span", { class: "d", text: d })),
+    h("span", { class: "go", "aria-hidden": "true" }, icon("arrow", 18)));
+  put(root,
+    h("section", { class: "hero", "aria-labelledby": "heroTitle" },
+      h("div", {},
+        live,
+        h("h1", { id: "heroTitle", text: "Put stake behind your word, and get it back by doing the work." }),
+        h("p", { class: "lede", text: "Stake GEN on a public goal with a deadline and a public proof link. Validators read the evidence when time is up. Kept, you get it all back. Missed, it goes to a shared pool for a good cause." }),
+        h("div", { class: "actions" }, h("a", { class: "btn btn-primary", href: "#/make" }, "Make a vow", icon("arrow", 18)), h("a", { class: "btn btn-secondary", href: "#/vows", text: "See public vows" }))),
+      h("div", { class: "hero-art" }, svgFrom(HERO_ART))),
+    stats,
+    h("section", { class: "section feed", "aria-labelledby": "feedTitle" },
+      h("div", { class: "sechead" }, h("h2", { id: "feedTitle", text: "Live contract activity" }), h("a", { class: "btn btn-quiet sm", href: EXPLORER(CONTRACT_ADDRESS), target: "_blank", rel: "noopener" }, "Explorer", icon("out", 16))),
+      h("div", { class: "panel", style: "padding-top:8px;padding-bottom:16px" }, feedList, feedFoot)),
+    h("section", { class: "section", "aria-labelledby": "rolesTitle" },
+      h("h2", { id: "rolesTitle", style: "margin-bottom:12px", text: "Start where you are" }),
+      h("div", { class: "roles" },
+        role("make", "I want to", "Commit to a goal", "Stake on commits, posts, a file or a log, with a deadline you pick.", "#/make"),
+        role("keep", "I want to", "Keep vows honest", "Run the check on vows that are past their deadline. Anyone can.", "#/vows?f=due"),
+        role("pool", "I care about", "The shared pool", "See where missed stakes go and send the pool to its beneficiary.", "#/pool"))),
+    h("section", { class: "section", "aria-labelledby": "writeTitle" },
+      h("h2", { id: "writeTitle", style: "margin-bottom:12px", text: "Say it in one sentence" }),
+      h("div", { class: "panel" }, h("p", { class: "xs", style: "margin-bottom:6px", text: "Tap any highlighted part to change it" }), comp,
+        h("div", { class: "actions", style: "margin-top:16px" }, go))),
+    h("section", { class: "section", "aria-labelledby": "howTitle" },
+      h("details", { class: "how", open: true },
+        h("summary", {}, h("span", { id: "howTitle", text: "How a vow works" }), icon("chev", 18)),
+        h("ol", { class: "steps" },
+          [["Stake", "Pick a goal, a deadline and a public proof link, and lock GEN on it."],
+           ["Do the work", "Commit, post or log in public. Only items dated inside the vow window count."],
+           ["Anyone checks", "After the deadline anyone runs the check. Validators read the link and count with an LLM, then agree."],
+           ["Settle", "Kept returns all, partial returns the matching share, missed goes to the pool. One appeal with a bond."]]
+            .map(([t, d], i) => h("li", {}, h("span", { class: "n", text: String(i + 1) }), h("h3", { text: t }), h("p", { text: d })))))),
+    h("section", { class: "section", "aria-labelledby": "latestTitle" },
+      h("div", { class: "sechead" }, h("h2", { id: "latestTitle", text: "Latest vows" }), h("a", { class: "btn btn-quiet sm", href: "#/vows", text: "All vows" })),
+      latest));
+
+  let st, pool, acct, events, list;
+  try { [st, pool, acct, events, list] = await Promise.all([readJson("get_stats"), readJson("get_pool"), readJson("get_accounting"), readJson("list_events", [0, 8]), readJson("list_vows", [0, 6, ""])]); }
+  catch (e) {
+    put(live, h("span", { text: "The contract could not be read right now" }));
+    put(stats, h("div", { style: "grid-column:1/-1" }, failBox(e, () => viewHome(root))));
+    clear(feedList); clear(latest);
+    return;
+  }
+  put(live, h("i", { "aria-hidden": "true" }), h("span", {}, h("b", { text: String(st.active) }), st.active === 1 ? " vow running right now" : " vows running right now"));
+  stats.removeAttribute("aria-busy");
+  const settledMix = `${st.met} kept, ${st.partial} partial, ${st.missed} missed`;
+  put(stats,
+    h("div", {}, h("dt", { text: "Vows made" }), h("dd", { text: String(st.vows) }), h("span", { class: "sub c-info", text: `${st.active} running, ${st.checked + st.appealed} awaiting settle` })),
+    h("div", {}, h("dt", { text: "At stake now" }), h("dd", {}, genStr(st.locked_stakes), h("small", { text: "GEN" })), h("span", { class: "sub c-sig", text: genStr(st.staked_total) + " GEN staked all time" })),
+    h("div", {}, h("dt", { text: "Kept rate" }), h("dd", { text: st.settled ? pct(st.kept_bps) : "–" }), h("span", { class: "sub c-ok", text: st.settled ? settledMix : "No vow settled yet" })),
+    h("div", {}, h("dt", { text: "Shared pool" }), h("dd", {}, genStr(pool.balance), h("small", { text: "GEN" })), h("span", { class: "sub c-part", text: genStr(pool.distributed_total) + " GEN given to " + (pool.beneficiary_label || "the beneficiary") })));
+  if (!events.items.length) put(feedList, h("li", {}, h("div", { class: "empty" }, h("h3", { text: "No activity yet" }), h("p", { text: "The first vow made on this contract appears here." }))));
+  else put(feedList, events.items.map(feedItem));
+  const balanced = !!acct.balanced;
+  put(feedFoot,
+    h("div", {}, h("b", { text: genStr(acct.locked_stakes) + " GEN" }), h("span", { text: "locked in vows" })),
+    h("div", {}, h("b", { text: genStr(acct.pool_balance) + " GEN" }), h("span", { text: "in the shared pool" })),
+    h("div", {}, h("b", { text: genStr(acct.owed_total) + " GEN" }), h("span", { text: "claimable by users" })),
+    h("div", { class: "bal" + (balanced ? "" : " off") }, h("b", {}, icon(balanced ? "check" : "x", 18), balanced ? "Balanced" : "Check"),
+      h("span", { text: balanced ? "Contract balance covers every stake, bond, pool and claim" : "Liabilities exceed the contract balance" })));
+  if (!list.items.length) put(latest, h("div", { class: "panel empty" }, h("h3", { text: "No vows yet" }), h("p", { text: "Be the first to put stake behind a public goal." }), h("a", { class: "btn btn-primary", href: "#/make", text: "Make the first vow" })));
+  else put(latest, h("div", { class: "cards" }, list.items.map(vowCard)));
+}
+
+/* =====================================================================
+   MAKE
+   ===================================================================== */
+function viewMake(root) {
+  if (gate(root)) return;
+  const tx = txPanel();
+  const titleIn = h("input", { class: "input", id: "titleIn", maxlength: String(state.cfg.max_title), value: draft.title, autocomplete: "off" });
+  const goalIn = h("textarea", { class: "input", id: "goalIn", maxlength: String(state.cfg.max_goal_text), rows: "3" }, draft.goalText);
+  const targetIn = h("input", { class: "input", id: "targetIn", inputmode: "numeric", value: draft.target, autocomplete: "off" });
+  const urlIn = h("input", { class: "input", id: "urlIn", inputmode: "url", value: draft.url, autocapitalize: "off", autocomplete: "off", spellcheck: "false" });
+  const stakeIn = h("input", { class: "input", id: "stakeIn", inputmode: "numeric", value: draft.stake, autocomplete: "off", style: "max-width:160px" });
+  const errs = { title: h("p", { class: "err" }), goal: h("p", { class: "err" }), target: h("p", { class: "err" }), url: h("p", { class: "err" }), deadline: h("p", { class: "err" }), stake: h("p", { class: "err" }) };
+  const goalChips = h("div", { class: "chips", role: "group", "aria-label": "Goal type" });
+  const durChips = h("div", { class: "chips", role: "group", "aria-label": "Deadline" });
+  const stakeChips = h("div", { class: "chips", role: "group", "aria-label": "Stake presets" });
+  const targetHelp = h("p", { class: "help" });
+  const urlHelp = h("p", { class: "help" });
+  const summary = h("div", {});
+  const submit = h("button", { class: "btn btn-primary block", type: "button", text: "Stake and make this vow" });
+  const touched = new Set();
+  function sync() {
+    draft.title = titleIn.value; draft.goalText = goalIn.value; draft.target = targetIn.value.trim(); draft.url = urlIn.value.trim(); draft.stake = stakeIn.value.trim();
+  }
+  function problems() {
+    const p = draftProblems();
+    if (!draft.title.trim()) p.title = "Give the vow a short title.";
+    if (!draft.goalText.trim()) p.goal = "Describe exactly what counts, for example which repository or which page.";
+    return p;
+  }
+  function drawGoalBits() {
+    const g = goalSpec(draft.goal);
+    put(goalChips, state.goals.map((x) => h("button", { class: "chip", type: "button", "aria-pressed": String(x.goal_type === draft.goal), text: x.title, onclick: () => {
+      draft.goal = x.goal_type;
+      if (x.max_target === 1) draft.target = "1";
+      targetIn.value = draft.target; draw(); } })));
+    titleIn.placeholder = GOAL_HINT[draft.goal].title;
+    goalIn.placeholder = GOAL_HINT[draft.goal].goal;
+    urlIn.placeholder = g.example;
+    put(targetHelp, g.min_target === g.max_target ? "This goal type has a fixed target of 1." : `How many ${g.units} are needed, ${g.min_target} to ${g.max_target}. Fewer returns a proportional share.`);
+    if (g.max_target === 1) targetIn.setAttribute("readonly", ""); else targetIn.removeAttribute("readonly");
+    put(urlHelp, g.evidence + (g.hosts.length ? ` on ${g.hosts.join(" or ")}` : "") + ". Example: " + g.example);
+  }
+  function drawDeadline() {
+    const presets = durationPresets();
+    const dateLabel = draft.customDay ? new Date(draft.customDay + "T12:00:00Z").toLocaleDateString(undefined, { day: "numeric", month: "short", timeZone: "UTC" }) : "Pick a date";
+    const inp = h("input", { class: "dateinp", type: "date", "aria-label": "Deadline date, end of day UTC", value: draft.customDay || "",
+      min: new Date(Date.now() + Number(state.cfg.min_duration_minutes) * 60000).toISOString().slice(0, 10),
+      max: new Date(Date.now() + Number(state.cfg.max_duration_minutes) * 60000).toISOString().slice(0, 10) });
+    inp.addEventListener("click", () => { try { inp.showPicker(); } catch (e) {} });
+    inp.addEventListener("change", () => { draft.customDay = inp.value; touched.add("deadline"); draw(); });
+    put(durChips, presets.map(([l, m]) => h("button", { class: "chip", type: "button", "aria-pressed": String(!draft.customDay && draft.minutes === m), text: l, onclick: () => { draft.minutes = m; draft.customDay = ""; draw(); } })),
+      h("span", { class: "chip", "aria-pressed": String(!!draft.customDay) }, icon("flag", 16), h("span", { text: dateLabel }), inp));
+  }
+  function drawStakeChips() {
+    put(stakeChips, STAKES.map((s) => h("button", { class: "chip", type: "button", "aria-pressed": String(draft.stake === s), text: s + " GEN", onclick: () => { stakeIn.value = s; touched.add("stake"); draw(); } })));
+  }
+  function draw() {
+    sync();
+    drawGoalBits(); drawDeadline(); drawStakeChips();
+    const p = problems();
+    for (const k of Object.keys(errs)) {
+      const show = touched.has(k) && p[k === "goal" ? "goal" : k];
+      errs[k].textContent = show || "";
+    }
+    [[titleIn, "title"], [goalIn, "goal"], [targetIn, "target"], [urlIn, "url"], [stakeIn, "stake"]].forEach(([el, k]) => el.setAttribute("aria-invalid", touched.has(k) && p[k] ? "true" : "false"));
+    const mins = draftMinutes();
+    const ends = nowSec() + mins * 60;
+    const stakeWei = /^\d+$/.test(draft.stake) ? BigInt(draft.stake) * WEI : 0n;
+    const bond = stakeWei ? bondFor(stakeWei) : 0n;
+    put(summary,
+      h("h2", { text: "Your vow" }),
+      h("p", { class: "muted", style: "margin-top:8px" }, `${draft.title.trim() || "Untitled vow"}: reach ${draft.target || "?"} ${noun(draft.goal, draft.target)} by ${mins > 0 ? fmtEpoch(ends) : "?"}.`),
+      h("dl", { class: "dl", style: "margin-top:14px" },
+        h("dt", { text: "Stake" }), h("dd", { text: stakeWei ? genStr(stakeWei) + " GEN" : "-" }),
+        h("dt", { text: "Deadline" }), h("dd", { text: mins > 0 ? (draft.customDay ? "End of " + draft.customDay + " UTC" : "in " + minutesLabel(mins)) : "-" }),
+        h("dt", { text: "Evidence" }), h("dd", { text: urlHost(draft.url) || "-" }),
+        h("dt", { text: "Appeal bond, if needed" }), h("dd", { text: bond ? genStr(bond) + " GEN" : "-" }),
+        h("dt", { text: "If missed, goes to" }), h("dd", { text: state.cfg.beneficiary_label || "the shared pool" })),
+      h("p", { class: "callout", style: "margin-top:14px", text: "Counting is by UTC calendar day: items dated from today to the deadline day count. Once made, a vow cannot be cancelled." }),
+      h("div", { style: "margin-top:16px" }, submit), tx.el);
+  }
+  for (const [el, k] of [[titleIn, "title"], [goalIn, "goal"], [targetIn, "target"], [urlIn, "url"], [stakeIn, "stake"]]) {
+    el.addEventListener("input", draw);
+    el.addEventListener("blur", () => { touched.add(k); draw(); });
+  }
+  submit.addEventListener("click", () => runButton(submit, async () => {
+    sync();
+    ["title", "goal", "target", "url", "deadline", "stake"].forEach((k) => touched.add(k));
+    draw();
+    const p = problems();
+    const firstBad = ["title", "goal", "target", "url", "stake"].find((k) => p[k]);
+    if (Object.keys(p).length) { toast("Fix the highlighted fields first", true); if (firstBad) ({ title: titleIn, goal: goalIn, target: targetIn, url: urlIn, stake: stakeIn })[firstBad].focus(); return; }
+    if (!needClient()) return;
+    const mins = draftMinutes();
+    const stakeWei = BigInt(draft.stake) * WEI;
+    const ok = await confirmAction({
+      title: "Stake " + genStr(stakeWei) + " GEN on this vow?",
+      intro: `${draft.title.trim()}: ${draft.target} ${noun(draft.goal, draft.target)}.`,
+      rows: [["Stake", genStr(stakeWei) + " GEN"], ["Deadline", fmtEpoch(nowSec() + mins * 60)], ["Evidence", urlHost(draft.url)], ["Full refund only if", "the evidence shows the target"]],
+      note: "The stake is locked until the vow is checked. It cannot be cancelled. A missed vow sends the stake to the shared pool.",
+      confirm: "Stake and make vow",
+    });
+    if (!ok) return;
+    const res = await write(tx, "the new vow", "create_vow", [draft.goal, draft.title.trim(), draft.goalText.trim(), Number(draft.target), draft.url.trim(), mins], stakeWei);
+    if (res && res.vow_id) {
+      toast("Vow #" + res.vow_id + " made");
+      put(tx.el.querySelector(".msg"), h("span", {}, "Vow #" + res.vow_id + " is live. ", h("a", { href: "#/vow/" + res.vow_id, text: "Open it" })));
+      draft.title = ""; draft.goalText = "";
+    } else if (res === true) toast("Vow submitted");
+  }));
+  put(root,
+    h("div", { class: "pagehead" }, h("h1", { text: "Make a vow" }), h("p", { text: "Choose what counts, when it is due and how much you stake. Everything is public and checked by validators against your evidence link." })),
+    h("div", { class: "cols act-first" },
+      h("div", { class: "panel" },
+        h("div", { class: "field" }, h("span", { class: "lbl-s", text: "Goal type" }), goalChips),
+        h("div", { class: "field" }, h("label", { for: "titleIn" }, "Title", h("span", { class: "req", "aria-hidden": "true", text: "*" })), titleIn, errs.title),
+        h("div", { class: "field" }, h("label", { for: "goalIn" }, "What counts", h("span", { class: "req", "aria-hidden": "true", text: "*" })), goalIn,
+          h("p", { class: "help", text: "Validators read this exact text. Name the repository, page or log and anything that must match." }), errs.goal),
+        h("div", { class: "field" }, h("label", { for: "targetIn" }, "Target", h("span", { class: "req", "aria-hidden": "true", text: "*" })), targetIn, targetHelp, errs.target),
+        h("div", { class: "field" }, h("label", { for: "urlIn" }, "Evidence link", h("span", { class: "req", "aria-hidden": "true", text: "*" })), urlIn, urlHelp, errs.url),
+        h("div", { class: "field" }, h("span", { class: "lbl-s", text: "Deadline" }), durChips, errs.deadline),
+        h("div", { class: "field" }, h("label", { for: "stakeIn", text: "Stake in GEN" }), h("div", { class: "row wrap" }, stakeIn, stakeChips), errs.stake)),
+      h("aside", { class: "panel side", "aria-label": "Vow summary" }, summary)));
+  draw();
+}
+function bondFor(stakeWei) {
+  const bps = BigInt(state.cfg.appeal_bond_bps);
+  const raw = (stakeWei * bps + 9999n) / 10000n;
+  const whole = ((raw + WEI - 1n) / WEI) * WEI;
+  const min = BigInt(state.cfg.min_appeal_bond_wei);
+  return whole > min ? whole : min;
+}
+
+/* =====================================================================
+   VOWS
+   ===================================================================== */
+const FILTERS = [["all", "All", ""], ["running", "Running", "ACTIVE"], ["due", "Due for check", "ACTIVE"], ["checked", "Awaiting settle", "CHECKED"], ["appealed", "Under appeal", "APPEALED"], ["settled", "Settled", "SETTLED"]];
+async function viewVows(root, params) {
+  if (gate(root)) return;
+  let filter = FILTERS.some((f) => f[0] === params.get("f")) ? params.get("f") : "all";
+  let items = [], offset = 0, total = 0, query = "";
+  const chipsBox = h("div", { class: "chips", role: "group", "aria-label": "Filter vows" });
+  const search = h("input", { class: "input", type: "search", placeholder: "Search by title or #id", "aria-label": "Search vows", oninput: (e) => { query = e.target.value.trim().toLowerCase(); draw(); } });
+  const listBox = h("div", {}, skel(56, 4));
+  const more = h("button", { class: "btn btn-secondary", type: "button", text: "Load more", hidden: true });
+  const count = h("p", { class: "xs" });
+  function drawChips() {
+    put(chipsBox, FILTERS.map(([k, l]) => h("button", { class: "chip", type: "button", "aria-pressed": String(k === filter), text: l, onclick: () => { filter = k; history.replaceState(null, "", "#/vows" + (k === "all" ? "" : "?f=" + k)); load(true); } })));
+  }
+  function visible() {
+    const now = nowSec();
+    return items.filter((v) => {
+      if (filter === "due" && !(Number(v.deadline_epoch) <= now)) return false;
+      if (filter === "running" && !(Number(v.deadline_epoch) > now)) return false;
+      if (!query) return true;
+      return v.title.toLowerCase().includes(query) || ("#" + v.id) === query || v.id === query.replace("#", "");
+    });
+  }
+  function draw() {
+    const vis = visible();
+    put(count, `Showing ${vis.length} of ${total} vow${total === 1 ? "" : "s"} loaded from the contract`);
+    if (!vis.length) put(listBox, h("div", { class: "empty" }, h("h3", { text: items.length ? "Nothing matches" : "No vows here yet" }),
+      h("p", { text: filter === "due" ? "When a running vow passes its deadline, it shows up here for anyone to check." : "Try another filter, or make a vow." }),
+      h("a", { class: "btn btn-primary", href: "#/make", text: "Make a vow" })));
+    else put(listBox, vowTable(vis));
+    more.hidden = offset >= total;
+  }
+  async function load(reset) {
+    if (reset) { items = []; offset = 0; put(listBox, skel(56, 4)); }
+    drawChips();
+    const status = FILTERS.find((f) => f[0] === filter)[2];
+    try {
+      const page = await readJson("list_vows", [offset, 50, status]);
+      items = items.concat(page.items); offset += page.items.length; total = page.total;
+      draw();
+    } catch (e) { put(listBox, failBox(e, () => load(true))); }
+  }
+  more.addEventListener("click", () => runButton(more, () => load(false)));
+  put(root,
+    h("div", { class: "pagehead" }, h("h1", { text: "Public vows" }), h("p", { text: "Every vow on the contract. A vow that is due can be checked by anyone; that is how vows stay honest." })),
+    h("div", { class: "panel" }, h("div", { class: "toolbar" }, search), chipsBox, h("div", { style: "margin-top:14px" }, listBox),
+      h("div", { class: "row between wrap", style: "margin-top:14px" }, count, more)));
+  load(true);
+}
+
+/* =====================================================================
+   ONE VOW
+   ===================================================================== */
+function ringSvg(pct, tone) {
+  const r = 26, c = 2 * Math.PI * r;
+  return svgFrom(`<svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--idle-soft)" stroke-width="7"/><circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--${tone})" stroke-width="7" stroke-linecap="round" stroke-dasharray="${(c * pct) / 100} ${c}" transform="rotate(-90 32 32)"/><text x="32" y="37" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">${Math.round(pct)}%</text></svg>`);
+}
+async function viewVow(root, id) {
+  if (gate(root)) return;
+  put(root, skel(80), skel(240));
+  let v, owed = "0";
+  try {
+    v = await readJson("get_vow", [String(id)]);
+    if (account) owed = await read("get_pending_withdrawal", [account]);
+  } catch (e) {
+    put(root, h("a", { class: "btn btn-quiet sm", href: "#/vows" }, icon("back", 16), "All vows"),
+      h("div", { class: "panel", style: "margin-top:12px" }, /no vow/i.test(explain(e)) ? h("div", { class: "empty" }, h("h3", { text: "Vow #" + id + " does not exist" }), h("p", { text: "Check the number, or browse all vows." })) : failBox(e, () => viewVow(root, id))));
+    return;
+  }
+  const g = goalSpec(v.goal_type) || { title: v.goal_type, units: "items" };
+  const st = statusOf({ ...v, verdict: v.final?.verdict || v.check?.verdict, settled_epoch: v.settled_epoch });
+  const now = nowSec();
+  const isMaker = same(account, v.maker);
+  const tx = txPanel();
+  const stake = BigInt(v.stake);
+  const bond = BigInt(v.appeal_bond);
+  const reload = () => setTimeout(() => { if (location.hash === "#/vow/" + v.id) viewVow(root, id); }, 1200);
+
+  const action = h("div", { class: "stack" });
+  const btn = (text, cls, fn) => { const b = h("button", { class: "btn block " + cls, type: "button", text }); b.addEventListener("click", () => runButton(b, fn)); return b; };
+  if (v.status === "ACTIVE" && now < Number(v.deadline_epoch)) {
+    put(action, h("h2", { text: "Running" }), h("p", { class: "muted", text: `Checking opens when the deadline passes, in ${span(Number(v.deadline_epoch) - now)} (${fmtEpoch(v.deadline_epoch)}).` }),
+      isMaker ? h("p", { class: "callout ok", text: "This is your vow. Do the work in public so the evidence link shows it before the deadline." }) : null,
+      h("button", { class: "btn btn-secondary block", type: "button", onclick: () => copyText(location.href, "Link") }, icon("link", 16), "Copy link to this vow"));
+  } else if (v.status === "ACTIVE") {
+    put(action, h("h2", { text: "Ready to check" }), h("p", { class: "muted", text: "The deadline has passed. Anyone can start the check: validators read the evidence link and count what it shows." }),
+      btn("Run the check", "btn-primary", async () => {
+        if (!needClient()) return;
+        const ok = await confirmAction({ title: "Check vow #" + v.id + " now?", intro: "Validators will fetch " + v.evidence_host + " and count what it shows against the goal.",
+          rows: [["Target", vowLine(v)], ["Stake", genStr(stake) + " GEN"], ["If kept", "Full stake returned at once"]],
+          note: "This cannot be undone. If the page cannot be read, nothing is recorded and you can try again later.", confirm: "Run the check" });
+        if (!ok) return;
+        const res = await write(tx, "the check", "check", [String(v.id)]);
+        if (res) { toast("Check recorded: " + (res.verdict ? verdictText(res.verdict) : "done")); reload(); }
+      }), tx.el);
+  } else if (v.status === "CHECKED") {
+    const open = now < Number(v.appeal_until);
+    const ret = (stake * BigInt(v.check.count)) / BigInt(v.target);
+    const note = h("textarea", { class: "input", id: "noteIn", rows: "3", maxlength: String(state.cfg.max_note), placeholder: "Point at what the first review missed, for example the dated entries on 21 and 22 Nov." });
+    const noteErr = h("p", { class: "err" });
+    put(action, h("h2", { text: "Checked: " + verdictText(v.check.verdict) }),
+      h("p", { class: "muted", text: `Counted ${v.check.count} of ${v.target}. Settling now returns ${genStr(ret)} GEN to the maker and sends ${genStr(stake - ret)} GEN to the pool.` }),
+      open ? h("p", { class: "small", text: `Appeal window closes in ${span(Number(v.appeal_until) - now)}.` }) : h("p", { class: "small", text: "The appeal window has closed. Anyone can settle." }),
+      isMaker || !open ? btn(isMaker && open ? "Accept and settle now" : "Settle this vow", "btn-primary", async () => {
+        if (!needClient()) return;
+        const ok = await confirmAction({ title: "Settle vow #" + v.id + "?", rows: [["Back to maker", genStr(ret) + " GEN"], ["To the shared pool", genStr(stake - ret) + " GEN"]],
+          note: isMaker && open ? "Settling now gives up your one appeal." : "This moves the stake and cannot be undone.", confirm: "Settle" });
+        if (!ok) return;
+        const res = await write(tx, "settlement", "finalize", [String(v.id)]);
+        if (res) { toast("Vow settled"); reload(); }
+      }) : h("p", { class: "callout", text: "Only the maker can settle early. After the window anyone can." }),
+      isMaker && open ? h("div", { class: "inset stack" }, h("h3", { text: "Appeal once" }),
+        h("p", { class: "small muted", text: `A second review counts again with your note. If it finds more, your bond of ${genStr(bond)} GEN comes back and the higher count is used. If not, the bond goes to the pool and the first count stands.` }),
+        h("div", { class: "field" }, h("label", { for: "noteIn", text: "Your note to the reviewers" }), note, noteErr),
+        btn("Appeal with " + genStr(bond) + " GEN bond", "btn-secondary", async () => {
+          const text = note.value.trim();
+          if (!text) { noteErr.textContent = "Write a short note for the reviewers."; note.setAttribute("aria-invalid", "true"); note.focus(); return; }
+          noteErr.textContent = ""; note.removeAttribute("aria-invalid");
+          const ok = await confirmAction({ title: "Appeal vow #" + v.id + "?", rows: [["Bond", genStr(bond) + " GEN"], ["First count", `${v.check.count} of ${v.target}`], ["Bond back if", "the second review counts more"]],
+            note: "You can appeal only once. The result can only stay the same or improve.", confirm: "Pay bond and appeal" });
+          if (!ok) return;
+          const res = await write(tx, "the appeal", "appeal", [String(v.id), text], bond);
+          if (res) { toast("Appeal filed"); reload(); }
+        })) : null, tx.el);
+  } else if (v.status === "APPEALED") {
+    put(action, h("h2", { text: "Under appeal" }), h("p", { class: "muted", text: "The appeal is filed. Anyone can run the second review, which also settles the vow." }),
+      btn("Run appeal review and settle", "btn-primary", async () => {
+        if (!needClient()) return;
+        const ok = await confirmAction({ title: "Run the appeal review for #" + v.id + "?", rows: [["Bond held", genStr(v.appeal.bond) + " GEN"], ["First count", `${v.check.count} of ${v.target}`]],
+          note: "This settles the vow and moves the stake and bond. It cannot be undone.", confirm: "Run review and settle" });
+        if (!ok) return;
+        const res = await write(tx, "the appeal review", "finalize", [String(v.id)]);
+        if (res) { toast("Appeal reviewed and vow settled"); reload(); }
+      }), tx.el);
+  } else {
+    const pr = Math.round((Number(v.final.count) / Number(v.target)) * 100);
+    put(action, h("div", { class: "verdict" }, ringSvg(v.final.verdict === "MET" ? 100 : pr, st.tone), h("div", {}, h("h2", { text: st.label }), h("p", { class: "muted small", text: `${v.final.count} of ${v.target} counted${v.final.source === "appeal" ? " on appeal" : ""}` }))),
+      h("dl", { class: "dl" }, h("dt", { text: "Returned to maker" }), h("dd", { text: genStr(v.returned) + " GEN" }), h("dt", { text: "Sent to the pool" }), h("dd", { text: genStr(v.forfeited) + " GEN" })),
+      isMaker && BigInt(owed) > 0n ? h("a", { class: "btn btn-primary block", href: "#/mine", text: "Withdraw " + genStr(owed) + " GEN" }) : null);
+  }
+
+  const tl = [
+    ["Vow made", fmtEpoch(v.created_epoch), true],
+    ["Deadline", fmtEpoch(v.deadline_epoch), now >= Number(v.deadline_epoch)],
+    ["Checked", v.check?.epoch ? `${fmtEpoch(v.check.epoch)} · ${verdictText(v.check.verdict)} ${v.check.count}/${v.target}` : "Waiting for anyone to check", !!v.check?.epoch],
+    v.appeal?.epoch ? ["Appealed", fmtEpoch(v.appeal.epoch) + (v.appeal.reviewed_epoch ? " · " + (v.appeal.upheld ? "upheld" : "rejected") : ""), true] : null,
+    ["Settled", v.settled_epoch ? fmtEpoch(v.settled_epoch) : "Not yet", !!v.settled_epoch],
+  ].filter(Boolean);
+  put(root,
+    h("a", { class: "btn btn-quiet sm", href: "#/vows" }, icon("back", 16), "All vows"),
+    h("div", { class: "pagehead", style: "margin-top:8px" }, h("div", { class: "row wrap", style: "gap:8px" }, chip(st), h("span", { class: "xs", text: "Vow #" + v.id })),
+      h("h1", { style: "margin-top:10px;overflow-wrap:anywhere", text: v.title }), h("p", { text: `${vowLine(v)} by ${fmtEpoch(v.deadline_epoch)}, ${genStr(stake)} GEN staked.` })),
+    h("div", { class: "cols act-first" },
+      h("div", { class: "stack" },
+        h("section", { class: "panel", "aria-labelledby": "goalH" }, h("h2", { id: "goalH", text: "The goal" }),
+          h("p", { style: "margin-top:8px;overflow-wrap:anywhere", text: v.goal_text }),
+          h("dl", { class: "dl", style: "margin-top:16px" },
+            h("dt", { text: "Goal type" }), h("dd", { text: g.title }),
+            h("dt", { text: "Target" }), h("dd", { text: vowLine(v) }),
+            h("dt", { text: "Counting window" }), h("dd", { text: `${fmtDay(v.created_epoch)} to ${fmtDay(v.deadline_epoch)} (UTC days)` }),
+            h("dt", { text: "Evidence" }), h("dd", {}, h("a", { href: v.evidence_url, target: "_blank", rel: "noopener nofollow", text: v.evidence_host })),
+            h("dt", { text: "Maker" }), h("dd", { class: "addr", text: v.maker }))),
+        v.check?.epoch ? h("section", { class: "panel", "aria-labelledby": "revH" }, h("h2", { id: "revH", text: "Reviews" }),
+          h("div", { class: "inset", style: "margin-top:12px" }, h("p", { class: "small" }, h("b", { text: "First review: " }), `${v.check.count} of ${v.target}, ${verdictText(v.check.verdict)}.`),
+            h("p", { class: "small muted", style: "margin-top:4px;overflow-wrap:anywhere", text: v.check.reason }), h("p", { class: "xs", style: "margin-top:4px", text: "Started by " + short(v.check.checker) + ", " + timeAgo(v.check.epoch) })),
+          v.appeal?.epoch ? h("div", { class: "inset", style: "margin-top:10px" }, h("p", { class: "small" }, h("b", { text: "Appeal note: " }), v.appeal.note),
+            v.appeal.reviewed_epoch ? h("p", { class: "small muted", style: "margin-top:4px;overflow-wrap:anywhere" }, `Second review: ${v.appeal.count} of ${v.target}. ${v.appeal.reason}`) : h("p", { class: "xs", style: "margin-top:4px", text: "Second review pending" })) : null) : null,
+        h("section", { class: "panel", "aria-labelledby": "tlH" }, h("h2", { id: "tlH", style: "margin-bottom:12px", text: "Timeline" }),
+          h("ol", { class: "timeline" }, tl.map(([w, s, done]) => h("li", { class: done ? "done" : "" }, h("span", { class: "b" }, done ? icon("check") : null), h("div", {}, h("div", { class: "w", text: w }), h("div", { class: "s", text: s }))))))),
+      h("aside", { class: "panel side", "aria-label": "Actions" }, action)));
+}
+
+/* =====================================================================
+   MINE
+   ===================================================================== */
+async function viewMine(root) {
+  if (gate(root)) return;
+  put(root, h("div", { class: "pagehead" }, h("h1", { text: "My vows" }), h("p", { text: "Your vows and the GEN you can withdraw from VowKeep." })));
+  if (!account) { root.append(h("div", { class: "panel measure" }, connectPrompt("Connect a wallet to see the vows you made and your claimable balance."))); return; }
+  const box = h("div", {}, skel(120, 2));
+  root.append(box);
+  let mine;
+  try { mine = await readJson("get_maker_vows", [account]); } catch (e) { put(box, failBox(e, () => viewMine(root))); return; }
+  const tx = txPanel();
+  const owed = BigInt(mine.pending_wei);
+  const wbtn = h("button", { class: "btn btn-primary", type: "button", text: "Withdraw " + genStr(owed) + " GEN", disabled: owed <= 0n });
+  wbtn.addEventListener("click", () => runButton(wbtn, async () => {
+    const ok = await confirmAction({ title: "Withdraw " + genStr(owed) + " GEN?", rows: [["To", short(account)], ["Amount", genStr(owed) + " GEN"]], confirm: "Withdraw" });
+    if (!ok) return;
+    const res = await write(tx, "the withdrawal", "withdraw", []);
+    if (res) { toast("Withdrawal sent"); setTimeout(() => viewMine(root), 1200); }
+  }));
+  const settled = mine.items.filter((v) => v.status === "SETTLED");
+  const back = settled.reduce((a, v) => a + BigInt(v.returned), 0n), lost = settled.reduce((a, v) => a + BigInt(v.forfeited), 0n);
+  put(box,
+    h("div", { class: "cols act-first" },
+      h("section", { class: "panel", "aria-labelledby": "myList" }, h("div", { class: "sechead" }, h("h2", { id: "myList", text: "Vows you made" }), h("a", { class: "btn btn-secondary sm", href: "#/make", text: "New vow" })),
+        mine.items.length ? vowTable(mine.items) : h("div", { class: "empty" }, h("h3", { text: "No vows yet" }), h("p", { text: "Your vows appear here once you make one with this account." }))),
+      h("aside", { class: "panel side stack", "aria-label": "Balance" },
+        h("h2", { text: "Claimable" }),
+        h("p", { style: "font-size:28px;font-weight:700;letter-spacing:-.02em" }, genStr(owed), h("span", { class: "muted", style: "font-size:16px;margin-left:6px", text: "GEN" })),
+        h("p", { class: "small muted", text: "Returned stakes, refunded bonds and any bounced payment land here until you withdraw." }),
+        wbtn, tx.el,
+        h("div", { class: "kv" }, h("div", {}, h("b", { text: String(mine.open) }), h("span", { text: "open vows" })), h("div", {}, h("b", { text: genStr(back) }), h("span", { text: "GEN returned" })), h("div", {}, h("b", { text: genStr(lost) }), h("span", { text: "GEN to the pool" }))))));
+}
+
+/* =====================================================================
+   POOL
+   ===================================================================== */
+async function viewPool(root) {
+  if (gate(root)) return;
+  put(root, h("div", { class: "pagehead" }, h("h1", { text: "The shared pool" }), h("p", { text: "Missed stakes, unreturned partial shares and rejected appeal bonds collect here. The owner names a beneficiary; anyone can send the pool to it." })), skel(160, 2));
+  let pool, acct, cfg;
+  try { [pool, acct, cfg] = await Promise.all([readJson("get_pool"), readJson("get_accounting"), readJson("get_config")]); state.cfg = cfg; }
+  catch (e) { put(root, failBox(e, () => viewPool(root))); return; }
+  const tx = txPanel(), otx = txPanel(), ftx = txPanel();
+  const bal = BigInt(pool.balance);
+  const dbtn = h("button", { class: "btn btn-primary block", type: "button", text: "Send " + genStr(bal) + " GEN to " + (pool.beneficiary_label || "the beneficiary"), disabled: bal <= 0n || !pool.beneficiary });
+  dbtn.addEventListener("click", () => runButton(dbtn, async () => {
+    if (!needClient()) return;
+    const ok = await confirmAction({ title: "Send the pool to " + pool.beneficiary_label + "?", rows: [["Amount", genStr(bal) + " GEN"], ["Beneficiary", short(pool.beneficiary)]],
+      note: "The amount is credited to the beneficiary, who withdraws it. This cannot be undone.", confirm: "Send the pool" });
+    if (!ok) return;
+    const res = await write(tx, "the distribution", "distribute_pool", []);
+    if (res) { toast("Pool sent to " + pool.beneficiary_label); setTimeout(() => viewPool(root), 1200); }
+  }));
+  const isOwner = same(account, cfg.owner);
+  const benIn = h("input", { class: "input", id: "benIn", value: pool.beneficiary || "", placeholder: "0x followed by 40 characters", autocapitalize: "off", autocomplete: "off", spellcheck: "false" });
+  const labIn = h("input", { class: "input", id: "labIn", value: pool.beneficiary_label || "", maxlength: String(cfg.max_label), placeholder: "For example: Open source maintainers fund" });
+  const benErr = h("p", { class: "err", role: "alert" });
+  const obtn = h("button", { class: "btn btn-secondary block", type: "button", text: "Save beneficiary" });
+  obtn.addEventListener("click", () => runButton(obtn, async () => {
+    const a = benIn.value.trim(), l = labIn.value.trim();
+    if (!okAddr(a) || /^0x0{40}$/i.test(a)) { benErr.textContent = "Enter a non-zero 0x address with 40 hexadecimal characters."; benIn.focus(); return; }
+    if (!l) { benErr.textContent = "Give the beneficiary a public name."; labIn.focus(); return; }
+    benErr.textContent = "";
+    const ok = await confirmAction({ title: "Set the beneficiary?", rows: [["Name", l], ["Address", short(a)]], note: "All future distributions go to this address.", confirm: "Set beneficiary" });
+    if (!ok) return;
+    const res = await write(otx, "the new beneficiary", "set_beneficiary", [a, l]);
+    if (res) { toast("Beneficiary set"); setTimeout(() => viewPool(root), 1200); }
+  }));
+  const fund = isSandbox() && account ? h("section", { class: "panel stack", "aria-labelledby": "fundH" }, h("h2", { id: "fundH", text: "Test GEN" }),
+    h("p", { class: "small muted", text: "The Studio simulator can credit test GEN to the connected account. This only works on Studio." }),
+    (() => { const b = h("button", { class: "btn btn-secondary block", type: "button", text: "Request 100 test GEN" });
+      b.addEventListener("click", () => runButton(b, async () => {
+        try {
+          const res = await fetch(RPC_URL, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "sim_fundAccount", params: [account, Number(100n * WEI)] }) });
+          const body = await res.json();
+          if (body.error) throw new Error(body.error.message || "The simulator refused");
+          toast("100 test GEN requested");
+        } catch (e) { put(ftx.el, h("div", { class: "msg" }, h("b", { text: "Test GEN could not be requested. " }), explain(e))); ftx.el.hidden = false; ftx.el.classList.add("bad"); }
+      })); return b; })(), ftx.el) : null;
+  const balanced = !!acct.balanced;
+  put(root,
+    h("div", { class: "pagehead" }, h("h1", { text: "The shared pool" }), h("p", { text: "Missed stakes, unreturned partial shares and rejected appeal bonds collect here. The owner names a beneficiary; anyone can send the pool to it." })),
+    h("div", { class: "cols act-first" },
+      h("div", { class: "stack" },
+        h("section", { class: "panel", "aria-labelledby": "poolH" }, h("h2", { id: "poolH", text: "Pool" }),
+          h("div", { class: "kv", style: "margin-top:14px" },
+            h("div", {}, h("b", { text: genStr(pool.balance) }), h("span", { text: "GEN waiting" })),
+            h("div", {}, h("b", { text: genStr(pool.distributed_total) }), h("span", { text: `GEN given in ${pool.distributions} distribution${pool.distributions === 1 ? "" : "s"}` })),
+            h("div", {}, h("b", { text: genStr(pool.forfeited_stakes_total) }), h("span", { text: "GEN from missed stakes" })),
+            h("div", {}, h("b", { text: genStr(pool.forfeited_bonds_total) }), h("span", { text: "GEN from rejected bonds" })),
+            h("div", {}, h("b", { text: genStr(pool.refunded_bonds_total) }), h("span", { text: "GEN bonds refunded" })),
+            h("div", {}, h("b", { text: pool.last_distribution_epoch ? timeAgo(pool.last_distribution_epoch) : "never" }), h("span", { text: "last distribution" })))),
+        h("section", { class: "panel", "aria-labelledby": "acctH" }, h("div", { class: "sechead" }, h("h2", { id: "acctH", text: "Accounting" }),
+            h("span", { class: "status " + (balanced ? "t-ok" : "t-bad"), text: balanced ? "Balanced" : "Check" })),
+          h("dl", { class: "dl" },
+            h("dt", { text: "Contract balance" }), h("dd", { text: genStr(acct.contract_balance, 4) + " GEN" }),
+            h("dt", { text: "Stakes locked in vows" }), h("dd", { text: genStr(acct.locked_stakes, 4) + " GEN" }),
+            h("dt", { text: "Appeal bonds held" }), h("dd", { text: genStr(acct.locked_bonds, 4) + " GEN" }),
+            h("dt", { text: "Shared pool" }), h("dd", { text: genStr(acct.pool_balance, 4) + " GEN" }),
+            h("dt", { text: "Claimable by users" }), h("dd", { text: genStr(acct.owed_total, 4) + " GEN" }),
+            h("dt", { text: "Paid out so far" }), h("dd", { text: genStr(acct.paid_out_total, 4) + " GEN" })),
+          h("p", { class: "xs", style: "margin-top:12px", text: "Balanced means the contract balance covers every locked stake, held bond, the pool and all claims." }))),
+      h("div", { class: "stack side" },
+        h("section", { class: "panel stack", "aria-labelledby": "benH" }, h("h2", { id: "benH", text: "Beneficiary" }),
+          pool.beneficiary ? h("div", {}, h("p", { style: "font-weight:700", text: pool.beneficiary_label }), h("p", { class: "addr xs", text: pool.beneficiary })) : h("p", { class: "muted small", text: "No beneficiary is set yet, so the pool keeps growing until the owner names one." }),
+          dbtn, tx.el),
+        isOwner ? h("section", { class: "panel", "aria-labelledby": "ownH" }, h("h2", { id: "ownH", text: "Owner settings" }),
+          h("div", { class: "field", style: "margin-top:12px" }, h("label", { for: "labIn", text: "Beneficiary name" }), labIn),
+          h("div", { class: "field" }, h("label", { for: "benIn", text: "Beneficiary address" }), benIn), benErr,
+          h("div", { style: "margin-top:14px" }, obtn), otx.el) : h("p", { class: "xs", style: "padding:0 4px" }, "Owner: ", h("span", { class: "addr", text: cfg.owner || "not set" })),
+        fund)));
+}
+
+/* =====================================================================
+   ROUTER
+   ===================================================================== */
+const TABS = [["#/", "Home", "home"], ["#/make", "Make", "plus"], ["#/vows", "Vows", "list"], ["#/mine", "Mine", "user"], ["#/pool", "Pool", "jar"]];
+function drawTabs(active) {
+  put($("tabList"), TABS.map(([href, label, ic]) => h("li", {}, h("a", { href, "aria-current": active === href ? "page" : null }, icon(ic, 22), h("span", { text: label })))));
+}
+async function route() {
+  const raw = location.hash.replace(/^#/, "") || "/";
+  const [path, qs] = raw.split("?");
+  const params = new URLSearchParams(qs || "");
+  const parts = path.split("/").filter(Boolean);
+  const root = $("main");
+  const tab = parts[0] === "vow" ? "#/vows" : "#/" + (parts[0] || "");
+  drawTabs(TABS.some((t) => t[0] === tab) ? tab : "#/");
+  if (hasContract && !state.cfg && !state.bootError) await boot();
+  window.scrollTo(0, 0);
+  if (!parts.length) return viewHome(root);
+  if (parts[0] === "make") return viewMake(root);
+  if (parts[0] === "vows") return viewVows(root, params);
+  if (parts[0] === "vow" && parts[1]) return viewVow(root, decodeURIComponent(parts[1]));
+  if (parts[0] === "mine") return viewMine(root);
+  if (parts[0] === "pool") return viewPool(root);
+  location.hash = "#/";
+}
+window.addEventListener("hashchange", route);
+if (readTestKey()) startTestSession(true);
+drawWallet();
+route();
+</script>
+</body>
+</html>
