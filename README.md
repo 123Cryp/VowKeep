@@ -21,8 +21,8 @@ A maker locks GEN on a goal (GitHub commits, published posts, a public file upda
 
 | | |
 | --- | --- |
-| Contract | `ADDRESS` |
-| Explorer | https://explorer-studio.genlayer.com/address/ADDRESS |
+| Contract | `0x700eF0ba77d682ab88Ee75909f19A34CFEb75F5C` |
+| Explorer | https://explorer-studio.genlayer.com/address/0x700eF0ba77d682ab88Ee75909f19A34CFEb75F5C |
 | Repository | https://github.com/123Cryp/VowKeep |
 | Network | GenLayer Studio |
 
