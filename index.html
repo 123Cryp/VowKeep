@@ -17,7 +17,7 @@
   --line:#D5DBE2; --line-strong:#BCC5CF;
   --sig:#A55400; --sig-hover:#8C4700; --on-sig:#FFFFFF; --sig-soft:#FBEFDF; --sig-line:#E9C493;
   --info:#2C5AA8; --info-soft:#E4ECF8; --due:#6A47B3; --due-soft:#ECE6F8; --appeal:#A0335B; --appeal-soft:#F7E3EA;
-  --ok:#1E7346; --ok-soft:#E1F1E7; --part:#0D7068; --part-soft:#DDF0EE; --bad:#B0281E; --bad-soft:#F8E2DF; --idle-soft:#E9EDF1;
+  --ok:#1E7346; --ok-soft:#E1F1E7; --part:#0D7068; --part-soft:#DDF0EE; --bad:#B0281E; --bad-soft:#F8E2DF; --idle-soft:#E9EDF1; --warn:#8A5A00; --warn-soft:#FBF0D6;
   --focus:#A55400;
   --shadow:0 1px 2px rgba(19,27,36,.06),0 1px 1px rgba(19,27,36,.04);
   --shadow-raise:0 6px 18px rgba(19,27,36,.08),0 1px 2px rgba(19,27,36,.06);
@@ -34,7 +34,7 @@
   --line:#262E39; --line-strong:#364150;
   --sig:#F2A93B; --sig-hover:#F7BC62; --on-sig:#1C1205; --sig-soft:#2B2213; --sig-line:#5A4321;
   --info:#86AEF2; --info-soft:#18233A; --due:#B9A1F4; --due-soft:#231C38; --appeal:#F193B4; --appeal-soft:#36192A;
-  --ok:#62CD93; --ok-soft:#13291E; --part:#5FCDC2; --part-soft:#112926; --bad:#F28A80; --bad-soft:#371917; --idle-soft:#1D232C;
+  --ok:#62CD93; --ok-soft:#13291E; --part:#5FCDC2; --part-soft:#112926; --bad:#F28A80; --bad-soft:#371917; --idle-soft:#1D232C; --warn:#E5B04A; --warn-soft:#2E2410;
   --focus:#F2A93B;
   --shadow:0 1px 2px rgba(0,0,0,.4); --shadow-raise:0 8px 22px rgba(0,0,0,.45); --shadow-pop:0 18px 48px rgba(0,0,0,.6);
   color-scheme:dark;
@@ -76,14 +76,15 @@ svg.ic{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;str
 .netbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 16px;background:var(--bad-soft);color:var(--ink);border-bottom:1px solid var(--line);font-size:var(--t-sm)}
 
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
-nav.tabs ul{list-style:none;margin:0;padding:4px 6px;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;height:var(--nav-h)}
+nav.tabs ul{list-style:none;margin:0;padding:4px 6px;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;height:var(--nav-h)}
+nav.tabs .wide-only{display:none}
 nav.tabs a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:100%;border-radius:var(--r-md);border:1px solid transparent;
   color:var(--ink-3);text-decoration:none;font-size:11.5px;font-weight:600}
 nav.tabs a:hover{color:var(--ink)}
 nav.tabs a[aria-current="page"]{color:var(--ink)}
 nav.tabs a[aria-current="page"] svg{color:var(--sig)}
 nav.tabs .side-brand,nav.tabs .side-foot{display:none}
-main{padding:24px 16px 48px;max-width:1120px;margin:0 auto;min-height:70vh}
+main{padding:24px 16px 48px;max-width:1120px;margin:0 auto}
 main:focus{outline:none}
 footer.foot{max-width:1120px;margin:0 auto;padding:0 16px 32px;font-size:var(--t-xs);color:var(--ink-3)}
 footer.foot p+p{margin-top:4px}
@@ -95,6 +96,7 @@ footer.foot .addr{color:var(--ink-2)}
   .walletbtn{max-width:320px}
   nav.tabs{top:0;right:auto;width:var(--side-w);bottom:0;border-top:0;border-right:1px solid var(--line);background:var(--surface);padding:14px 12px;display:flex;flex-direction:column}
   nav.tabs .side-brand{display:flex;padding:0 8px}
+  nav.tabs .wide-only{display:list-item}
   nav.tabs ul{display:flex;flex-direction:column;height:auto;padding:18px 0;gap:4px}
   nav.tabs a{flex-direction:row;justify-content:flex-start;gap:12px;height:44px;padding:0 12px;font-size:var(--t-sm);color:var(--ink-2)}
   nav.tabs a[aria-current="page"]{border-color:var(--line-strong);background:var(--surface-2)}
@@ -118,7 +120,8 @@ footer.foot .addr{color:var(--ink-2)}
 .pagehead{margin-bottom:24px}
 .pagehead h1{font-size:clamp(24px,4.6vw,30px)}
 .pagehead p{margin-top:6px;color:var(--ink-2);max-width:62ch}
-.section{margin-top:40px}
+.section{margin-top:24px}
+.stack>.panel+.panel,.stack>section+section{margin-top:24px}
 .sechead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
 .sechead .btn{flex:none}
 
@@ -129,7 +132,7 @@ footer.foot .addr{color:var(--ink-2)}
 .callout.warn{border-left-color:var(--sig);background:var(--sig-soft)}
 .callout.bad{border-left-color:var(--bad);background:var(--bad-soft)}
 .callout.ok{border-left-color:var(--ok);background:var(--ok-soft)}
-.cols{display:grid;gap:20px;grid-template-columns:minmax(0,1fr)}
+.cols{display:grid;gap:24px;grid-template-columns:minmax(0,1fr)}
 @media (max-width:899px){.cols.act-first>.side{order:-1}}
 @media (min-width:900px){.cols{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:start;gap:24px}.cols .side{position:sticky;top:78px}}
 
@@ -174,7 +177,7 @@ textarea.input{min-height:88px;resize:vertical}
 .status{display:inline-flex;align-items:center;gap:6px;font-size:var(--t-xs);font-weight:650;padding:3px 10px 3px 8px;border-radius:999px;background:var(--idle-soft);color:var(--ink-2);white-space:nowrap}
 .status::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
 .t-info{background:var(--info-soft);color:var(--info)} .t-due{background:var(--due-soft);color:var(--due)} .t-appeal{background:var(--appeal-soft);color:var(--appeal)}
-.t-ok{background:var(--ok-soft);color:var(--ok)} .t-part{background:var(--part-soft);color:var(--part)} .t-bad{background:var(--bad-soft);color:var(--bad)} .t-wait{background:var(--idle-soft);color:var(--ink-2)}
+.t-ok{background:var(--ok-soft);color:var(--ok)} .t-part{background:var(--part-soft);color:var(--part)} .t-bad{background:var(--bad-soft);color:var(--bad)} .t-warn{background:var(--warn-soft);color:var(--warn)} .t-wait{background:var(--idle-soft);color:var(--ink-2)}
 
 .hero{display:grid;gap:24px;grid-template-columns:minmax(0,1fr);align-items:center}
 @media (min-width:860px){.hero{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}}
@@ -182,21 +185,21 @@ textarea.input{min-height:88px;resize:vertical}
 .livepill i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
 .livepill b{color:var(--ink)}
 .hero h1{margin-top:16px;max-width:18ch}
-.lede{margin-top:12px;color:var(--ink-2);font-size:var(--t-lg);max-width:46ch;line-height:1.5}
+.lede{margin-top:12px;color:var(--ink-2);font-size:16px;max-width:46ch;line-height:1.5}
 .hero .actions{margin-top:22px}
 .hero-art{max-width:420px;width:100%;justify-self:center}
 .hero-art svg{width:100%;height:auto;display:block}
 .stamp{transform-box:fill-box;transform-origin:center;animation:stamp .7s var(--ease) .35s both}
 @keyframes stamp{from{opacity:0;transform:scale(1.35) rotate(-14deg)}to{opacity:1;transform:scale(1) rotate(-8deg)}}
 @media (prefers-reduced-motion:reduce){.stamp{animation:none;transform:rotate(-8deg)}}
-.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin:28px 0 0;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow)}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin:24px 0 0;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow)}
 @media (min-width:760px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .stats>div{background:var(--surface);padding:14px 16px;min-width:0}
 .stats dt{font-size:var(--t-xs);color:var(--ink-3);font-weight:600}
 .stats dd{margin:4px 0 0;font-size:clamp(20px,4.6vw,26px);font-weight:700;letter-spacing:-.02em;line-height:1.15;overflow-wrap:anywhere}
 .stats dd small{font-size:var(--t-sm);font-weight:600;color:var(--ink-3);margin-left:4px}
 .stats .sub{display:block;margin-top:4px;font-size:var(--t-xs);font-weight:600}
-.sub.c-ok{color:var(--ok)} .sub.c-info{color:var(--info)} .sub.c-sig{color:var(--sig)} .sub.c-part{color:var(--part)}
+.sub.c-ok{color:var(--ok)} .sub.c-info{color:var(--info)}
 
 .feed ol{list-style:none;margin:0;padding:0}
 .feed li+li{border-top:1px solid var(--line)}
@@ -225,8 +228,15 @@ textarea.input{min-height:88px;resize:vertical}
 .role .d{display:block;font-size:var(--t-sm);color:var(--ink-2);margin-top:2px}
 .role .go{color:var(--ink-3)}
 
-.sentence{font-size:clamp(18px,3.6vw,22px);line-height:2.15;font-weight:500;color:var(--ink-2)}
-.tok{display:inline-block;vertical-align:baseline;min-height:38px;line-height:1.3;padding:5px 12px;margin:2px 1px;border-radius:999px;border:1px solid var(--sig-line);background:var(--sig-soft);
+.sentence{font-size:16px;line-height:1.55;font-weight:500;color:var(--ink-2)}
+.tokrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:16px}
+.costline{margin-top:12px;font-size:var(--t-sm);color:var(--ink-2);display:flex;flex-wrap:wrap;gap:4px 12px}
+.costline b{color:var(--ink);font-weight:600}
+.netnote{margin-top:8px;font-size:var(--t-xs);color:var(--ink-3)}
+.core{margin-top:16px;padding:16px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:719px){.hero-art{display:none}.hero h1{margin-top:12px}.lede{margin-top:8px}}
+.tok{display:inline-block;vertical-align:baseline;min-height:38px;line-height:1.3;padding:5px 12px;margin:0;border-radius:999px;border:1px solid var(--sig-line);background:var(--sig-soft);
   color:var(--ink);font:inherit;font-weight:650;font-size:inherit;cursor:pointer;max-width:100%}
 select.tok{appearance:none;-webkit-appearance:none;padding-right:28px;background-image:linear-gradient(45deg,transparent 50%,var(--ink-3) 50%),linear-gradient(135deg,var(--ink-3) 50%,transparent 50%);
   background-position:calc(100% - 15px) 55%,calc(100% - 10px) 55%;background-size:5px 5px;background-repeat:no-repeat}
@@ -253,11 +263,14 @@ details.how[open] summary .ic{transform:rotate(180deg)}
 .cards{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
 @media (min-width:700px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (min-width:1100px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.vcard{display:flex;flex-direction:column;gap:10px;padding:16px;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--ink-3);border-radius:var(--r-lg);
+.vcard{position:relative;overflow:hidden;--edge:var(--ink-3);display:flex;flex-direction:column;gap:10px;padding:19px 16px 16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
   text-decoration:none;color:var(--ink);box-shadow:var(--shadow);min-width:0}
+.vcard::before{content:"";position:absolute;left:-1px;right:-1px;top:-1px;height:3px;background:var(--edge)}
 .vcard:hover{box-shadow:var(--shadow-raise)}
-.vcard.e-info{border-top-color:var(--info)} .vcard.e-due{border-top-color:var(--due)} .vcard.e-appeal{border-top-color:var(--appeal)}
-.vcard.e-ok{border-top-color:var(--ok)} .vcard.e-part{border-top-color:var(--part)} .vcard.e-bad{border-top-color:var(--bad)} .vcard.e-wait{border-top-color:var(--line-strong)}
+.vcard.e-info{--edge:var(--info)} .vcard.e-due{--edge:var(--due)} .vcard.e-appeal{--edge:var(--appeal)}
+.vcard.e-ok{--edge:var(--ok)} .vcard.e-part{--edge:var(--part)} .vcard.e-warn{--edge:var(--warn)} .vcard.e-bad{--edge:var(--bad)} .vcard.e-wait{--edge:var(--line-strong)}
+.vcard .amt{font-size:var(--t-lg);font-weight:600}
+.vcard .open{display:inline-flex;align-items:center;gap:6px;min-height:36px;font-size:var(--t-sm);font-weight:600;color:var(--ink)}
 .vcard h3{font-size:var(--t-md);overflow-wrap:anywhere}
 .vcard .meta{display:flex;justify-content:space-between;gap:8px;font-size:var(--t-xs);color:var(--ink-3);flex-wrap:wrap}
 .vcard .goal{font-size:var(--t-sm);color:var(--ink-2)}
@@ -363,7 +376,7 @@ details.tune summary{cursor:pointer;padding:12px 0;font-weight:650;font-size:var
 </nav>
 <main id="main" tabindex="-1"></main>
 <footer class="foot">
-  <p>Contract <span class="addr" id="footAddr">not set</span></p>
+  <p class="row wrap" style="gap:8px">Contract <span class="addr" id="footAddr">not set</span><span id="footBtns" class="row" style="gap:4px"></span></p>
   <p id="footMode">Every number on this page is read from the contract.</p>
 </footer>
 <div class="toasts" id="toasts" aria-live="polite"></div>
@@ -509,10 +522,18 @@ function resolveContract() {
 }
 const CONTRACT_ADDRESS = resolveContract();
 const hasContract = CONTRACT_ADDRESS !== ZERO;
-$("footAddr").textContent = hasContract ? CONTRACT_ADDRESS : "not set";
+$("footAddr").textContent = hasContract ? short(CONTRACT_ADDRESS) : "not set";
 $("brandMark").appendChild(svgFrom(MARK));
 $("brandMark2").appendChild(svgFrom(MARK));
 const EXPLORER = (a) => "https://explorer-studio.genlayer.com/address/" + a;
+const TESTNOTE = "Studio test network, no real value.";
+const netNote = () => h("p", { class: "netnote", text: TESTNOTE });
+(function footContract() {
+  if (!hasContract) return;
+  const btns = $("footBtns");
+  btns.append(h("button", { class: "btn btn-quiet sm", type: "button", onclick: () => copyText(CONTRACT_ADDRESS, "Contract address") }, icon("copy", 16), "Copy"),
+    h("a", { class: "btn btn-quiet sm", href: EXPLORER(CONTRACT_ADDRESS), target: "_blank", rel: "noopener" }, "Explorer", icon("out", 16)));
+})();
 
 /* ---------- theme ---------- */
 function themePref() { return document.documentElement.dataset.themePref || "auto"; }
@@ -648,6 +669,7 @@ function confirmAction({ title, intro, rows = [], note, confirm, danger, extra }
       rows.length ? h("dl", { class: "dl", style: "margin-top:16px" }, rows.map(([k, v]) => [h("dt", { text: k }), h("dd", { text: v })])) : null,
       extra || null,
       note ? h("p", { class: "callout warn", style: "margin-top:16px", text: note }) : null,
+      netNote(),
       h("div", { class: "actions", style: "margin-top:22px" },
         h("button", { class: "btn btn-secondary", type: "button", text: "Go back", onclick: () => closeDialog(false) }),
         h("button", { class: "btn " + (danger ? "btn-danger" : "btn-primary"), type: "button", id: "dlgConfirm", text: confirm, onclick: () => closeDialog(true) })));
@@ -669,6 +691,7 @@ async function openWallet() {
     h("p", { class: "small muted" }, "Claimable from VowKeep: ", owed, " GEN"),
     h("div", { class: "actions" },
       h("button", { class: "btn btn-secondary sm", type: "button", onclick: () => copyText(account) }, icon("copy", 16), "Copy address"),
+      h("a", { class: "btn btn-secondary sm", href: "#/mine", onclick: () => closeDialog(false) }, icon("user", 16), "My vows"),
       h("button", { class: "btn btn-danger sm", type: "button", text: "Disconnect", onclick: disconnect }))) : null;
   openDialog(account ? "Wallet" : "Connect a wallet",
     connected,
@@ -856,7 +879,7 @@ function statusOf(v) {
   if (v.status === "APPEALED") return { label: "Under appeal", tone: "appeal" };
   if (v.verdict === "MET") return { label: "Kept", tone: "ok" };
   if (v.verdict === "PARTIAL") return { label: "Partly kept", tone: "part" };
-  return { label: "Missed", tone: "bad" };
+  return { label: "Missed", tone: "warn" };
 }
 const chip = (st) => h("span", { class: "status t-" + st.tone, text: st.label });
 function whenLine(v) {
@@ -882,7 +905,7 @@ function gate(root) {
     put(root, h("div", { class: "panel stack measure", role: "alert" },
       h("h1", { text: "The contract could not be reached" }),
       h("p", { class: "muted", text: state.bootError }),
-      h("p", { class: "xs addr", text: "Contract " + CONTRACT_ADDRESS }),
+      h("p", { class: "xs addr", text: "Contract " + short(CONTRACT_ADDRESS) }),
       h("div", { class: "actions" },
         h("button", { class: "btn btn-primary", type: "button", text: "Try again", onclick: async () => { state.bootError = ""; await boot(); route(); } }),
         h("button", { class: "btn btn-secondary", type: "button", text: "Change contract", onclick: openWallet }))));
@@ -899,17 +922,16 @@ function connectPrompt(text) {
 }
 function vowCard(v) {
   const st = statusOf(v);
-  const pr = progressOf(v);
   return h("a", { class: "vcard e-" + st.tone, href: "#/vow/" + v.id },
-    h("div", { class: "row between" }, chip(st), h("span", { class: "xs", text: "#" + v.id })),
     h("h3", { text: v.title }),
-    h("p", { class: "goal", text: `${vowLine(v)} · ${genStr(v.stake)} GEN staked` }),
-    pr === null ? null : h("div", { class: "bar", role: "img", "aria-label": `${v.count} of ${v.target} counted` }, h("i", { style: `width:${pr}%` })),
-    h("div", { class: "meta" }, h("span", { text: whenLine(v) }), h("span", { text: "by " + short(v.maker) })));
+    h("div", {}, chip(st)),
+    h("p", { class: "amt", text: genStr(v.stake) + " GEN staked" }),
+    h("p", { class: "meta" }, [vowLine(v), whenLine(v), "by " + short(v.maker)].join(" \u00b7 ")),
+    h("span", { class: "open" }, "Open vow", icon("arrow", 16)));
 }
 function vowTable(items) {
   const tbody = h("tbody", {}, items.map((v) => h("tr", { onclick: () => (location.hash = "#/vow/" + v.id) },
-    h("td", {}, h("a", { href: "#/vow/" + v.id, text: v.title }), h("div", { class: "xs", text: `#${v.id} · ${vowLine(v)}` })),
+    h("td", {}, h("a", { href: "#/vow/" + v.id, text: v.title }), h("div", { class: "xs", text: vowLine(v) })),
     h("td", { text: genStr(v.stake) + " GEN" }),
     h("td", { text: fmtDay(v.deadline_epoch) }),
     h("td", { class: "xs", text: short(v.maker) }),
@@ -918,7 +940,7 @@ function vowTable(items) {
     h("div", { class: "only-wide" }, h("table", { class: "table" }, h("thead", {}, h("tr", {}, ["Vow", "Stake", "Deadline", "Maker", "Status"].map((t) => h("th", { scope: "col", text: t })))), tbody)),
     h("ul", { class: "rows only-narrow" }, items.map((v) => h("li", {}, h("a", { href: "#/vow/" + v.id },
       h("span", { class: "r1", text: v.title }),
-      h("span", { class: "r2", text: `#${v.id} · ${genStr(v.stake)} GEN · ${whenLine(v)}` }),
+      h("span", { class: "r2", text: [genStr(v.stake) + " GEN", whenLine(v)].join(" \u00b7 ") }),
       h("span", { class: "r3" }, chip(statusOf(v))))))));
 }
 
@@ -979,7 +1001,7 @@ function editEvidence(after) {
 function composer(onChange) {
   const issues = h("p", { class: "issues", role: "alert", id: "composerIssues" });
   const fire = () => { draw(); onChange && onChange(); };
-  const target = h("input", { class: "tok", inputmode: "numeric", value: draft.target, "aria-label": "Target number", "aria-describedby": "composerIssues", oninput: (e) => { draft.target = e.target.value.trim(); validate(); onChange && onChange(); } });
+  const target = h("input", { class: "tok", inputmode: "numeric", value: draft.target, "aria-label": "Target number", "aria-describedby": "composerIssues", oninput: (e) => { draft.target = e.target.value.trim(); draw(); onChange && onChange(); } });
   const goal = h("select", { class: "tok", "aria-label": "Goal type", onchange: (e) => {
     draft.goal = e.target.value; const g = goalSpec(draft.goal);
     if (g.max_target === 1) draft.target = "1";
@@ -992,6 +1014,9 @@ function composer(onChange) {
     [...new Set([...STAKES, draft.stake])].sort((a, b) => Number(a) - Number(b)).map((s) => h("option", { value: s, selected: s === draft.stake, text: s + " GEN" })));
   const ev = h("button", { class: "tok", type: "button", "aria-label": "Evidence link", onclick: () => editEvidence(fire), text: urlHost(draft.url) || "a public link" });
   const wrap = h("div", {});
+  const sentence = h("p", { class: "sentence", "aria-live": "polite" });
+  const tokrow = h("div", { class: "tokrow" }, target, goal, dur, stake, ev);
+  put(wrap, sentence, tokrow, issues);
   function validate() {
     const p = draftProblems();
     target.setAttribute("aria-invalid", p.target ? "true" : "false");
@@ -1005,7 +1030,8 @@ function composer(onChange) {
     target.value = draft.target;
     if (goalSpec(draft.goal).max_target === 1) target.setAttribute("readonly", ""); else target.removeAttribute("readonly");
     ev.textContent = urlHost(draft.url) || "a public link";
-    put(wrap, h("p", { class: "sentence" }, "I vow to reach ", target, " ", goal, " ", dur, ", staking ", stake, ", proven by ", ev, "."), issues);
+    const mins = draftMinutes();
+    sentence.textContent = `I vow to reach ${draft.target || "?"} ${noun(draft.goal, draft.target)} ${draft.customDay ? "by " + draft.customDay : "in " + minutesLabel(mins)}, staking ${draft.stake || "?"} GEN, proven by ${urlHost(draft.url) || "a public link"}.`;
     validate();
   }
   draw();
@@ -1048,7 +1074,16 @@ async function viewHome(root) {
   const feedFoot = h("div", { class: "feed-foot" });
   const latest = h("div", {}, skel(120, 2));
   const go = h("a", { class: "btn btn-primary", href: "#/make" }, "Review and stake", icon("arrow", 18));
-  const comp = composer(() => {});
+  const cost = h("p", { class: "costline" });
+  const updCost = () => {
+    const sw = /^\d+$/.test(draft.stake) ? BigInt(draft.stake) * WEI : 0n;
+    const bond = sw ? bondFor(sw) : 0n;
+    const mins = draftMinutes();
+    put(cost, h("span", {}, "Stake ", h("b", { text: sw ? genStr(sw) + " GEN" : "-" })), h("span", {}, "Ends ", h("b", { text: mins > 0 ? fmtEpoch(nowSec() + mins * 60) : "-" })),
+      h("span", { text: "Back in full if kept" }), h("span", {}, "Appeal bond ", h("b", { text: bond ? genStr(bond) + " GEN" : "-" })));
+  };
+  const comp = composer(updCost);
+  updCost();
   const role = (art, k, t, d, href) => h("a", { class: "role", href }, h("span", { class: "tile" }, svgFrom(ROLE_ART[art])),
     h("span", {}, h("span", { class: "k", text: k }), h("span", { class: "t", text: t }), h("span", { class: "d", text: d })),
     h("span", { class: "go", "aria-hidden": "true" }, icon("arrow", 18)));
@@ -1057,7 +1092,9 @@ async function viewHome(root) {
       h("div", {},
         live,
         h("h1", { id: "heroTitle", text: "Put stake behind your word, and get it back by doing the work." }),
-        h("p", { class: "lede", text: "Stake GEN on a public goal with a deadline and a public proof link. Validators read the evidence when time is up. Kept, you get it all back. Missed, it goes to a shared pool for a good cause." }),
+        h("p", { class: "lede", text: "Stake GEN on a goal. Prove it to get it back, or it goes to a pool." }),
+        h("h2", { class: "sr-only", text: "Say it in one sentence" }),
+        h("div", { class: "panel core" }, comp, cost, h("div", { class: "actions", style: "margin-top:14px" }, go), netNote()),
         h("div", { class: "actions" }, h("a", { class: "btn btn-primary", href: "#/make" }, "Make a vow", icon("arrow", 18)), h("a", { class: "btn btn-secondary", href: "#/vows", text: "See public vows" }))),
       h("div", { class: "hero-art" }, svgFrom(HERO_ART))),
     stats,
@@ -1070,12 +1107,8 @@ async function viewHome(root) {
         role("make", "I want to", "Commit to a goal", "Stake on commits, posts, a file or a log, with a deadline you pick.", "#/make"),
         role("keep", "I want to", "Keep vows honest", "Run the check on vows that are past their deadline. Anyone can.", "#/vows?f=due"),
         role("pool", "I care about", "The shared pool", "See where missed stakes go and send the pool to its beneficiary.", "#/pool"))),
-    h("section", { class: "section", "aria-labelledby": "writeTitle" },
-      h("h2", { id: "writeTitle", style: "margin-bottom:12px", text: "Say it in one sentence" }),
-      h("div", { class: "panel" }, h("p", { class: "xs", style: "margin-bottom:6px", text: "Tap any highlighted part to change it" }), comp,
-        h("div", { class: "actions", style: "margin-top:16px" }, go))),
     h("section", { class: "section", "aria-labelledby": "howTitle" },
-      h("details", { class: "how", open: true },
+      h("details", { class: "how", open: window.matchMedia("(min-width: 720px)").matches },
         h("summary", {}, h("span", { id: "howTitle", text: "How a vow works" }), icon("chev", 18)),
         h("ol", { class: "steps" },
           [["Stake", "Pick a goal, a deadline and a public proof link, and lock GEN on it."],
@@ -1099,10 +1132,10 @@ async function viewHome(root) {
   stats.removeAttribute("aria-busy");
   const settledMix = `${st.met} kept, ${st.partial} partial, ${st.missed} missed`;
   put(stats,
-    h("div", {}, h("dt", { text: "Vows made" }), h("dd", { text: String(st.vows) }), h("span", { class: "sub c-info", text: `${st.active} running, ${st.checked + st.appealed} awaiting settle` })),
-    h("div", {}, h("dt", { text: "At stake now" }), h("dd", {}, genStr(st.locked_stakes), h("small", { text: "GEN" })), h("span", { class: "sub c-sig", text: genStr(st.staked_total) + " GEN staked all time" })),
+    h("div", {}, h("dt", { text: "Vows" }), h("dd", { text: String(st.vows) }), h("span", { class: "sub c-info", text: `${st.active} running, ${st.checked + st.appealed} awaiting settle` })),
+    h("div", {}, h("dt", { text: "Staked" }), h("dd", {}, genStr(st.locked_stakes), h("small", { text: "GEN" })), h("span", { class: "sub c-info", text: genStr(st.staked_total) + " GEN staked all time" })),
     h("div", {}, h("dt", { text: "Kept rate" }), h("dd", { text: st.settled ? pct(st.kept_bps) : "–" }), h("span", { class: "sub c-ok", text: st.settled ? settledMix : "No vow settled yet" })),
-    h("div", {}, h("dt", { text: "Shared pool" }), h("dd", {}, genStr(pool.balance), h("small", { text: "GEN" })), h("span", { class: "sub c-part", text: genStr(pool.distributed_total) + " GEN given to " + (pool.beneficiary_label || "the beneficiary") })));
+    h("div", {}, h("dt", { text: "Pool" }), h("dd", {}, genStr(pool.balance), h("small", { text: "GEN" })), h("span", { class: "sub c-info", text: genStr(pool.distributed_total) + " GEN given to " + (pool.beneficiary_label || "the beneficiary") })));
   if (!events.items.length) put(feedList, h("li", {}, h("div", { class: "empty" }, h("h3", { text: "No activity yet" }), h("p", { text: "The first vow made on this contract appears here." }))));
   else put(feedList, events.items.map(feedItem));
   const balanced = !!acct.balanced;
@@ -1195,7 +1228,7 @@ function viewMake(root) {
         h("dt", { text: "Appeal bond, if needed" }), h("dd", { text: bond ? genStr(bond) + " GEN" : "-" }),
         h("dt", { text: "If missed, goes to" }), h("dd", { text: state.cfg.beneficiary_label || "the shared pool" })),
       h("p", { class: "callout", style: "margin-top:14px", text: "Counting is by UTC calendar day: items dated from today to the deadline day count. Once made, a vow cannot be cancelled." }),
-      h("div", { style: "margin-top:16px" }, submit), tx.el);
+      h("div", { style: "margin-top:16px" }, submit, netNote()), tx.el);
   }
   for (const [el, k] of [[titleIn, "title"], [goalIn, "goal"], [targetIn, "target"], [urlIn, "url"], [stakeIn, "stake"]]) {
     el.addEventListener("input", draw);
@@ -1258,7 +1291,7 @@ async function viewVows(root, params) {
   let filter = FILTERS.some((f) => f[0] === params.get("f")) ? params.get("f") : "all";
   let items = [], offset = 0, total = 0, query = "";
   const chipsBox = h("div", { class: "chips", role: "group", "aria-label": "Filter vows" });
-  const search = h("input", { class: "input", type: "search", placeholder: "Search by title or #id", "aria-label": "Search vows", oninput: (e) => { query = e.target.value.trim().toLowerCase(); draw(); } });
+  const search = h("input", { class: "input", type: "search", placeholder: "Search by title", "aria-label": "Search vows", oninput: (e) => { query = e.target.value.trim().toLowerCase(); draw(); } });
   const listBox = h("div", {}, skel(56, 4));
   const more = h("button", { class: "btn btn-secondary", type: "button", text: "Load more", hidden: true });
   const count = h("p", { class: "xs" });
@@ -1271,7 +1304,7 @@ async function viewVows(root, params) {
       if (filter === "due" && !(Number(v.deadline_epoch) <= now)) return false;
       if (filter === "running" && !(Number(v.deadline_epoch) > now)) return false;
       if (!query) return true;
-      return v.title.toLowerCase().includes(query) || ("#" + v.id) === query || v.id === query.replace("#", "");
+      return v.title.toLowerCase().includes(query);
     });
   }
   function draw() {
@@ -1330,7 +1363,7 @@ async function viewVow(root, id) {
   const reload = () => setTimeout(() => { if (location.hash === "#/vow/" + v.id) viewVow(root, id); }, 1200);
 
   const action = h("div", { class: "stack" });
-  const btn = (text, cls, fn) => { const b = h("button", { class: "btn block " + cls, type: "button", text }); b.addEventListener("click", () => runButton(b, fn)); return b; };
+  const btn = (text, cls, fn) => { const b = h("button", { class: "btn block " + cls, type: "button", text }); b.addEventListener("click", () => runButton(b, fn)); return h("div", {}, b, netNote()); };
   if (v.status === "ACTIVE" && now < Number(v.deadline_epoch)) {
     put(action, h("h2", { text: "Running" }), h("p", { class: "muted", text: `Checking opens when the deadline passes, in ${span(Number(v.deadline_epoch) - now)} (${fmtEpoch(v.deadline_epoch)}).` }),
       isMaker ? h("p", { class: "callout ok", text: "This is your vow. Do the work in public so the evidence link shows it before the deadline." }) : null,
@@ -1453,7 +1486,7 @@ async function viewMine(root) {
         h("h2", { text: "Claimable" }),
         h("p", { style: "font-size:28px;font-weight:700;letter-spacing:-.02em" }, genStr(owed), h("span", { class: "muted", style: "font-size:16px;margin-left:6px", text: "GEN" })),
         h("p", { class: "small muted", text: "Returned stakes, refunded bonds and any bounced payment land here until you withdraw." }),
-        wbtn, tx.el,
+        wbtn, netNote(), tx.el,
         h("div", { class: "kv" }, h("div", {}, h("b", { text: String(mine.open) }), h("span", { text: "open vows" })), h("div", {}, h("b", { text: genStr(back) }), h("span", { text: "GEN returned" })), h("div", {}, h("b", { text: genStr(lost) }), h("span", { text: "GEN to the pool" }))))));
 }
 
@@ -1529,7 +1562,7 @@ async function viewPool(root) {
       h("div", { class: "stack side" },
         h("section", { class: "panel stack", "aria-labelledby": "benH" }, h("h2", { id: "benH", text: "Beneficiary" }),
           pool.beneficiary ? h("div", {}, h("p", { style: "font-weight:700", text: pool.beneficiary_label }), h("p", { class: "addr xs", text: pool.beneficiary })) : h("p", { class: "muted small", text: "No beneficiary is set yet, so the pool keeps growing until the owner names one." }),
-          dbtn, tx.el),
+          dbtn, netNote(), tx.el),
         isOwner ? h("section", { class: "panel", "aria-labelledby": "ownH" }, h("h2", { id: "ownH", text: "Owner settings" }),
           h("div", { class: "field", style: "margin-top:12px" }, h("label", { for: "labIn", text: "Beneficiary name" }), labIn),
           h("div", { class: "field" }, h("label", { for: "benIn", text: "Beneficiary address" }), benIn), benErr,
@@ -1540,9 +1573,9 @@ async function viewPool(root) {
 /* =====================================================================
    ROUTER
    ===================================================================== */
-const TABS = [["#/", "Home", "home"], ["#/make", "Make", "plus"], ["#/vows", "Vows", "list"], ["#/mine", "Mine", "user"], ["#/pool", "Pool", "jar"]];
+const TABS = [["#/", "Home", "home"], ["#/make", "Make", "plus"], ["#/vows", "Vows", "list"], ["#/mine", "Mine", "user", "wide"], ["#/pool", "Pool", "jar"]];
 function drawTabs(active) {
-  put($("tabList"), TABS.map(([href, label, ic]) => h("li", {}, h("a", { href, "aria-current": active === href ? "page" : null }, icon(ic, 22), h("span", { text: label })))));
+  put($("tabList"), TABS.map(([href, label, ic, wide]) => h("li", wide ? { class: "wide-only" } : {}, h("a", { href, "aria-current": active === href ? "page" : null }, icon(ic, 22), h("span", { text: label })))));
 }
 async function route() {
   const raw = location.hash.replace(/^#/, "") || "/";

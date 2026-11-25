@@ -69,6 +69,22 @@ class FrontendTests(unittest.TestCase):
         self.assertEqual(len(re.findall(r'type: "date"', JS)), 1)
         self.assertIn("dateinp", CSS)
 
+    def test_design_section_11_pitfalls(self):
+        self.assertNotIn("min-height:70vh", CSS)
+        self.assertIn("repeat(4,1fr)", CSS)
+        self.assertIn("wide-only", CSS)
+        self.assertIn(".vcard::before", CSS)
+        self.assertNotIn("border-top:3px", CSS)
+        self.assertNotIn("#${v.id}", JS)
+        self.assertNotIn('"#" + v.id }', JS)
+        self.assertNotIn("c-sig", JS)
+        self.assertNotIn("c-part", JS)
+        self.assertIn('label: "Missed", tone: "warn"', JS)
+        self.assertIn("min-width: 720px", JS)
+        self.assertIn("short(CONTRACT_ADDRESS)", JS)
+        self.assertGreaterEqual(JS.count("netNote()"), 6)
+        self.assertIn("Studio test network", JS)
+
     def test_no_fake_data(self):
         for bad in ("Lorem", "lorem", "Math.random()", "John Doe", "TODO"):
             self.assertNotIn(bad, HTML)
