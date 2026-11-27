@@ -509,6 +509,21 @@ function timeAgo(epoch) {
   if (d < 86400 * 30) return span(d) + " ago";
   return new Date(e * 1000).toLocaleDateString(undefined, { day: "numeric", month: "short" });
 }
+function unreadableRule(v, now) {
+  const lateAt = Number(v.deadline_epoch) + Number(state.cfg.check_timeout_seconds);
+  const stakeTxt = genStr(BigInt(v.stake)) + " GEN";
+  const late = now >= lateAt;
+  return {
+    lateAt, late,
+    when: late ? "The check timeout has passed (" + fmtEpoch(lateAt) + ")" : "Before " + fmtEpoch(lateAt) + " (in " + span(lateAt - now) + ")",
+    unreadable: late
+      ? "Recorded as MISSED with 0 counted"
+      : "Nothing is recorded; you can try again",
+    effect: late
+      ? "Stake of " + stakeTxt + " goes to the shared pool after the appeal window, unless the maker appeals once"
+      : "From " + fmtEpoch(lateAt) + " an unreadable page is recorded as MISSED, and the stake of " + stakeTxt + " goes to the shared pool after the appeal window unless the maker appeals once"
+  };
+}
 const fmtEpoch = (e) => { try { return new Date(Number(e) * 1000).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }); } catch (x) { return String(e); } };
 const fmtDay = (e) => new Date(Number(e) * 1000).toLocaleDateString(undefined, { day: "numeric", month: "short" });
 
@@ -1369,12 +1384,13 @@ async function viewVow(root, id) {
       isMaker ? h("p", { class: "callout ok", text: "This is your vow. Do the work in public so the evidence link shows it before the deadline." }) : null,
       h("button", { class: "btn btn-secondary block", type: "button", onclick: () => copyText(location.href, "Link") }, icon("link", 16), "Copy link to this vow"));
   } else if (v.status === "ACTIVE") {
-    put(action, h("h2", { text: "Ready to check" }), h("p", { class: "muted", text: "The deadline has passed. Anyone can start the check: validators read the evidence link and count what it shows." }),
+    put(action, h("h2", { text: "Ready to check" }), h("p", { class: "muted", text: "The deadline has passed. Anyone can start the check: validators read the evidence link and count what it shows. " + (unreadableRule(v, now).late ? "The check timeout has passed, so an unreadable page is now recorded as MISSED." : "If the page stays unreadable until " + fmtEpoch(unreadableRule(v, now).lateAt) + ", it is then recorded as MISSED.") }),
       btn("Run the check", "btn-primary", async () => {
         if (!needClient()) return;
         const ok = await confirmAction({ title: "Check vow #" + v.id + " now?", intro: "Validators will fetch " + v.evidence_host + " and count what it shows against the goal.",
-          rows: [["Target", vowLine(v)], ["Stake", genStr(stake) + " GEN"], ["If kept", "Full stake returned at once"]],
-          note: "This cannot be undone. If the page cannot be read, nothing is recorded and you can try again later.", confirm: "Run the check" });
+          rows: [["Target", vowLine(v)], ["Stake", genStr(stake) + " GEN"], ["If kept", "Full stake returned at once"],
+            ["If the page cannot be read", unreadableRule(v, now).unreadable], ["Financial effect of a timeout", unreadableRule(v, now).effect]],
+          note: "This cannot be undone. The check timeout is " + span(Number(state.cfg.check_timeout_seconds)) + " after the deadline, as set in the contract configuration.", confirm: "Run the check" });
         if (!ok) return;
         const res = await write(tx, "the check", "check", [String(v.id)]);
         if (res) { toast("Check recorded: " + (res.verdict ? verdictText(res.verdict) : "done")); reload(); }
@@ -1412,7 +1428,8 @@ async function viewVow(root, id) {
     put(action, h("h2", { text: "Under appeal" }), h("p", { class: "muted", text: "The appeal is filed. Anyone can run the second review, which also settles the vow." }),
       btn("Run appeal review and settle", "btn-primary", async () => {
         if (!needClient()) return;
-        const ok = await confirmAction({ title: "Run the appeal review for #" + v.id + "?", rows: [["Bond held", genStr(v.appeal.bond) + " GEN"], ["First count", `${v.check.count} of ${v.target}`]],
+        const ok = await confirmAction({ title: "Run the appeal review for #" + v.id + "?", rows: [["Bond held", genStr(v.appeal.bond) + " GEN"], ["First count", `${v.check.count} of ${v.target}`],
+            ["If the page cannot be read", "Nothing is recorded until " + span(Number(state.cfg.appeal_timeout_seconds)) + " after the appeal; after that the first count stands and the bond goes to the pool"]],
           note: "This settles the vow and moves the stake and bond. It cannot be undone.", confirm: "Run review and settle" });
         if (!ok) return;
         const res = await write(tx, "the appeal review", "finalize", [String(v.id)]);

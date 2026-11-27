@@ -85,6 +85,12 @@ class FrontendTests(unittest.TestCase):
         self.assertGreaterEqual(JS.count("netNote()"), 6)
         self.assertIn("Studio test network", JS)
 
+    def test_check_confirmation_describes_timeout(self):
+        self.assertIn("unreadableRule", JS)
+        self.assertIn("check_timeout_seconds", JS)
+        self.assertIn("recorded as MISSED", JS)
+        self.assertNotIn("nothing is recorded and you can try again later", JS)
+
     def test_no_fake_data(self):
         for bad in ("Lorem", "lorem", "Math.random()", "John Doe", "TODO"):
             self.assertNotIn(bad, HTML)
